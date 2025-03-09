@@ -1,26 +1,7 @@
 <template>
-  <router-view />
+  <div id="app">
+    <router-view></router-view>
+  </div>
 </template>
 
-<script setup>
-// Keeping the logic minimal for now
-</script>
-
-<style scoped>
-html,
-body,
-#app {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-#app {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-}
-</style>
+<script setup></script>

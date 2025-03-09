@@ -1,12 +1,11 @@
 import { createWebHistory, createRouter } from "vue-router";
-import CountrySelectView from "@/views/CountrySelectView.vue";
 import WeatherPageView from "@/views/WeatherPageView.vue";
-
+import HomeView from "@/views/HomeView.vue";
 const routes = [
   {
     path: "/",
-    name: "CountrySelect",
-    component: CountrySelectView,
+    name: "HomePage",
+    component: HomeView,
   },
   {
     path: "/weather",
