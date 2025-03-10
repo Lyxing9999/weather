@@ -11,6 +11,7 @@ export const useCountryWeatherStore = defineStore("weather", () => {
   const lon = ref(null);
   const isWeatherApiSuccessful = ref(false);
   const loading = ref(false);
+  const isLocationAccessRequested = ref(false);
 
   //URL
   const API_KEY = process.env.VUE_APP_API_KEY;
@@ -24,7 +25,7 @@ export const useCountryWeatherStore = defineStore("weather", () => {
 
     loading.value = true;
     const params = new URLSearchParams({
-      sections: "current,hourly",
+      sections: "all",
       language: "en",
       units: "auto",
       key: API_KEY,
@@ -60,10 +61,13 @@ export const useCountryWeatherStore = defineStore("weather", () => {
         lon.value = position.coords.longitude;
         placeId.value = null;
         locationDenied.value = false;
+        isLocationAccessRequested.value = false;
       },
       (error) => {
+        alert(
+          "Location access denied. Please allow access to get weather data."
+        );
         console.error("Error getting location:", error);
-        alert("Please enable location access to get the weather information.");
         locationDenied.value = true;
       }
     );
@@ -79,5 +83,6 @@ export const useCountryWeatherStore = defineStore("weather", () => {
     lat,
     lon,
     loading,
+    isLocationAccessRequested,
   };
 });

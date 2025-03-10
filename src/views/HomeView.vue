@@ -14,13 +14,15 @@
       <button class="option-button" @click="toggleCountrySelect">
         Select Country
       </button>
-      <button class="option-button" @click="handleButtonClick">
+      <button class="option-button" @click="getWeatherData">
         <span v-if="weatherStore.loading">Loading...</span>
-        <span v-else> Get Forecast</span>
+        <span v-else>View Forecast</span>
       </button>
-      <div v-if="isLocationAccessRequested" class="location-denied-message">
+      <div
+        v-if="weatherStore.isLocationAccessRequested"
+        class="location-denied-message">
         <p>Please allow location access to get the weather information.</p>
-        <button @click="requestLocation">Retry</button>
+        <button @click="getWeatherData">Retry</button>
       </div>
     </div>
   </div>
@@ -45,36 +47,29 @@ const toggleCountrySelect = () => {
   isLocationAccessRequested.value = false;
   isCountrySelectVisible.value = !isCountrySelectVisible.value;
 };
-// Handle the "Get Forecast" or "Retry" button click
-const handleButtonClick = async () => {
-  if (weatherStore.locationDenied) {
-    await requestLocation();
-  } else {
-    await getWeatherData();
-  }
-};
+
 // Get weather data based on location availability
 const getWeatherData = async () => {
-  if (weatherStore.locationDenied) {
-    isLocationAccessRequested.value = true;
-  } else {
-    await weatherStore.getWeatherData();
-    if (weatherStore.isWeatherApiSuccessful) {
-      router.push("/weather");
+  try {
+    weatherStore.isLocationAccessRequested = false;
+    await weatherStore.getCurrentLocation();
+    if (weatherStore.locationDenied) {
+      weatherStore.isLocationAccessRequested = true;
+    } else {
+      weatherStore.isLocationAccessRequested = false;
+      await weatherStore.getWeatherData();
+      if (weatherStore.isWeatherApiSuccessful) {
+        router.push({ path: "/weather" });
+      }
     }
+  } catch (error) {
+    alert("Error fetching weather data:", error);
   }
 };
 
-const requestLocation = async () => {
-  await weatherStore.getCurrentLocation();
-  if (weatherStore.locationDenied) {
-    isLocationAccessRequested.value = true;
-  } else {
-    isLocationAccessRequested.value = false;
-  }
-};
-weatherStore.getCurrentLocation();
 onMounted(() => {
+  weatherStore.getCurrentLocation();
+
   lottie.loadAnimation({
     container: document.getElementById("animation-bg"),
     renderer: "svg",

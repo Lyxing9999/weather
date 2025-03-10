@@ -9,10 +9,13 @@
       @focus="dropdownVisible = true"
       @input="toggleDropdown"
       :disabled="isCountryOrCitySelected"
-      :aria-expanded="dropdownVisible.toString()"
+      :aria-expanded="dropdownVisible"
       aria-describedby="country-search-list" />
     <div class="dropdown" id="country-search-list">
-      <ul v-if="dropdownVisible" class="dropdown-list" role="listbox">
+      <ul
+        v-if="dropdownVisible && filteredCountries.length > 0"
+        class="dropdown-list"
+        role="listbox">
         <li
           v-for="country in filteredCountries"
           :key="country"
@@ -192,6 +195,7 @@ watch(countries, (newCountries) => {
     selectedPlaceId.value = null;
   }
 });
+
 const emit = defineEmits(["goBack"]);
 function goBack() {
   emit("goBack");
@@ -391,12 +395,11 @@ label {
 }
 
 .button-container {
-  margin-top: 1.6em;
+  margin-top: 1.2em;
 }
 
 button {
-  margin-top: 1.6em;
-  margin: 8px;
+  margin: 6px;
 }
 
 input:disabled,
@@ -444,9 +447,14 @@ select option:disabled {
     left: 50%;
     transform: translateX(-10%); /* Center dropdown */
   }
-
+  .button-container {
+    margin-top: 1.2rem;
+  }
   .dropdown-list {
     width: 90%;
+  }
+  button {
+    margin: 6px; /* Slightly smaller margin on mobile */
   }
 }
 
