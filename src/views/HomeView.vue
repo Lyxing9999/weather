@@ -1,30 +1,36 @@
 <template>
   <div class="full-screen">
     <div id="animation-bg" class="animation-bg"></div>
+
     <!-- CountrySelect component only renders when isShow is true -->
-    <div class="country-select">
-      <CountrySelect
-        v-if="isCountrySelectVisible"
-        @goBack="toggleCountrySelect" />
-    </div>
+
+    <Transition name="slide-fade">
+      <div class="country-select" v-if="isCountrySelectVisible">
+        <CountrySelect
+          :key="isCountrySelectVisible"
+          @goBack="toggleCountrySelect" />
+      </div>
+    </Transition>
 
     <!-- Buttons only render when isShow is false -->
 
-    <div v-if="!isCountrySelectVisible" class="buttons">
-      <button class="option-button" @click="toggleCountrySelect">
-        Select Country
-      </button>
-      <button class="option-button" @click="getWeatherData">
-        <span v-if="weatherStore.loading">Loading...</span>
-        <span v-else>View Forecast</span>
-      </button>
-      <div
-        v-if="weatherStore.isLocationAccessRequested"
-        class="location-denied-message">
-        <p>Please allow location access to get the weather information.</p>
-        <button @click="getWeatherData">Retry</button>
+    <Transition name="fade-move">
+      <div v-if="!isCountrySelectVisible" class="buttons">
+        <button class="option-button-toggle" @click="toggleCountrySelect">
+          Select Country
+        </button>
+        <button class="option-button-get-weather" @click="getWeatherData">
+          <span v-if="weatherStore.loading">Loading...</span>
+          <span v-else>View Forecast</span>
+        </button>
+        <div
+          v-if="weatherStore.isLocationAccessRequested"
+          class="location-denied-message">
+          <p>Please allow location access to get the weather information.</p>
+          <button @click="getWeatherData">Retry</button>
+        </div>
       </div>
-    </div>
+    </Transition>
   </div>
 </template>
 
@@ -37,18 +43,21 @@ import lottie from "lottie-web";
 import animationData from "@/assets/Animation-BG.json";
 
 // Reactive state and stores
+
 const weatherStore = useCountryWeatherStore();
 const router = useRouter();
 const isCountrySelectVisible = ref(false);
 const isLocationAccessRequested = ref(false);
 
 // Toggle the visibility of the country select component
+
 const toggleCountrySelect = () => {
   isLocationAccessRequested.value = false;
   isCountrySelectVisible.value = !isCountrySelectVisible.value;
 };
 
 // Get weather data based on location availability
+
 const getWeatherData = async () => {
   try {
     weatherStore.isLocationAccessRequested = false;
@@ -81,25 +90,63 @@ onMounted(() => {
 </script>
 
 <style scoped>
-html,
-body {
-  height: 100%;
-  margin: 0;
-  font-family: "Arial", sans-serif;
-}
 .full-screen {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100vh;
-  background: var(--gradient-bg);
+  height: 100%;
+  background-image: var(--background-color);
   text-align: center;
   position: relative;
   overflow: hidden;
-  text-align: center;
 }
+.country-select {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: absolute;
+  top: 0; /* Start above the viewport */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+  z-index: 5;
+}
+.slide-fade-enter-active {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.slide-fade-leave-active {
+  transition: all 0.25s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+}
+
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translate(-50%, -100%); /* Start above screen */
+}
+
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translate(-50%, -100%); /* Exit downward */
+}
+
+.fade-move-leave-active {
+  transition: all 0.1s ease-in;
+}
+
+.fade-move-enter-from {
+  opacity: 0;
+  transform: translateY(40px); /* Enter from below */
+}
+
+.fade-move-leave-to {
+  opacity: 0;
+  transform: translateY(10px); /* Exit downward */
+}
+
 .animation-bg {
   position: absolute;
   top: -10%;
@@ -107,14 +154,6 @@ body {
   width: 100%;
   height: 90%;
   z-index: 0;
-}
-.country-select {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  position: absolute;
 }
 .buttons {
   display: flex;
@@ -128,47 +167,41 @@ body {
   z-index: 9999;
 }
 
-.option-button {
+.option-button-toggle,
+.option-button-get-weather {
   background-color: #ffffff;
   color: var(--secondary-color);
   border: 2px solid var(--secondary-color);
-  border-radius: 8px;
+  border-radius: 7px;
   padding: 14px 30px;
   font-size: 1.1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.28s ease;
   width: 200px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow);
   text-transform: uppercase;
   font-weight: 500;
 }
 
-.option-button:hover {
+.option-button-toggle:hover {
   background-color: var(--secondary-color);
   color: #ffffff;
   transform: translateY(-2.5px);
 }
-
-.option-button:active {
-  transform: translateY(1px);
-}
-
-.option-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(255, 165, 0, 0.6);
-}
-
-.option-button.active {
-  background-color: #fda085;
+.option-button-get-weather {
+  background-color: var(--secondary-color);
   color: #ffffff;
+}
+.option-button-get-weather:hover {
+  opacity: 0.8;
+  transform: translateY(-2.5px);
 }
 .location-denied-message {
   background-color: #ffcccc;
   padding: 5px;
-
   text-align: center;
   border: 1px solid #ff0000;
-  border-radius: 8px;
+  border-radius: 7px;
 }
 
 .location-denied-message button {
@@ -179,6 +212,7 @@ body {
   border-radius: 4px;
   cursor: pointer;
 }
+
 @media (max-width: 500px) {
   .full-screen {
     padding: 20px;
@@ -196,7 +230,7 @@ body {
   }
 
   .option-button {
-    width: 100%; /* Full width on small screens */
+    width: 100%;
     padding: 14px 30px;
     font-size: 1.1rem;
   }

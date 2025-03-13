@@ -1,29 +1,38 @@
 :root {
-  --primary-color: linear-gradient(
+  --primary-gradient: linear-gradient(
     135deg,
-    #64b5f6,
-    #4fc3f7,
-    #29b6f6
-  ); /* Layered, luminous sky gradient */
-  --secondary-color: #03a9f4; /* Energetic, focused accent blue */
-  --text-color: #1a237e; /* Deep, reliable text */
-  --background-color: #f0f8ff; /* Whispering cloud white */
-  --box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.15); /* Soft, ambient shadow */
-  --gradient-bg: linear-gradient(
-    135deg,
-    #263238,
-    #37474f,
-    #455a64
-  ); /* Depth and atmospheric layers gradient */
+    #2c3e50,
+    #3498db
+  ); /* Dark slate to bright blue */
+  --secondary-color: #4a90e2; /* Dark slate blue */
+  --text-light: rgba(236, 240, 241, 0.8); /* Slightly transparent light text */
+
+  --accent-color: #3498db; /* Bright blue */
+  --shadow: 0px 15px 25px rgba(0, 0, 0, 0.3); /* Shadow */
+  --blur-bg: rgba(255, 255, 255, 0.6); /* Blur background */
+  --background-color: #f0f8ff;
+
+  /* Weather Color Variables */
+  --wx-text-primary: #2c3e50;
+  --wx-accent: #6c8ea4;
+  --wx-text-secondary: #7f8c8d;
+  --wx-text-muted: rgba(44, 62, 80, 0.9);
+  --wx-loading: #6c8ea4;
+
+  --slide-distance: 40px;
+  --fade-distance: 30px;
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 html,
-body,
-#app {
-  font-family: "Arial", sans-serif;
+body {
   margin: 0;
   padding: 0;
-  background-color: #f9f9f9;
-  color: #333;
+  width: 100vw;
+  height: 100%;
+  font-family: "Poppins", sans-serif;
+  background: var(--primary-gradient);
+  color: var(--text-dark);
 }
 
 #app {
@@ -31,6 +40,34 @@ body,
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 100vh;
-  overflow: hidden;
+  height: 100%;
+}
+
+button {
+  background-color: #ffffff;
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.26s ease;
+  width: 180px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+button:hover {
+  background-color: var(--secondary-color);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.7);
 }

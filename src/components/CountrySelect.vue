@@ -1,80 +1,90 @@
 <template>
   <!-- search country -->
-  <div class="search-country" ref="searchBox">
-    <h1>Search for Country</h1>
-    <input
-      name="input"
-      v-model="selectedCountry"
-      placeholder="Search"
-      @focus="dropdownVisible = true"
-      @input="toggleDropdown"
-      :disabled="isCountryOrCitySelected"
-      :aria-expanded="dropdownVisible"
-      aria-describedby="country-search-list" />
-    <div class="dropdown" id="country-search-list">
-      <ul
-        v-if="dropdownVisible && filteredCountries.length > 0"
-        class="dropdown-list"
-        role="listbox">
-        <li
-          v-for="country in filteredCountries"
-          :key="country"
-          role="option"
-          @click="selectOption(country)">
-          {{ country }}
-        </li>
-      </ul>
-    </div>
-    <div class="country-display-div" v-if="countries" aria-live="polite">
-      <h2 class="country-display">
-        <strong>Country: </strong> {{ countries[0].name }}
-      </h2>
-    </div>
+  <Transition name="from-slide">
+    <div class="search-country" ref="searchBox">
+      <h1>Search for Country</h1>
+      <input
+        name="input"
+        v-model="selectedCountry"
+        placeholder="Search"
+        @focus="dropdownVisible = true"
+        @input="toggleDropdown"
+        :disabled="isCountryOrCitySelected"
+        :aria-expanded="dropdownVisible"
+        aria-describedby="country-search-list" />
 
-    <label for="selectedPlaceId">city</label>
-    <select
-      v-model="selectedPlaceId"
-      :disabled="!countries || countries.length === 0"
-      id="selectedPlaceId"
-      name="city">
-      <option disabled :value="null">select a city</option>
-      <option
-        v-for="country in countries"
-        :key="country.name"
-        :value="country.place_id">
-        {{ country.name }}
-      </option>
-    </select>
-    <!-- Error message if weather data for the selected country is not available -->
-    <p v-if="weatherError" class="error-message">
-      <span v-if="weatherStore.loading">Loading...</span>
-      <span v-else-if="!countries?.length && selectedCountry"
-        >No cities found for this country.</span
-      >
-      <span v-else
-        >Error: Unable to retrieve weather data. Please try again.</span
-      >
-      <button
-        @click="getLocationData"
-        :disabled="weatherStore.loading"
-        aria-label="Retry getting location data">
-        Retry
-      </button>
-    </p>
+      <!-- Dropdown -->
+      <Transition name="dropdown-fade">
+        <div class="dropdown" id="country-search-list">
+          <ul
+            v-if="dropdownVisible && filteredCountries.length > 0"
+            class="dropdown-list"
+            role="listbox">
+            <li
+              v-for="country in filteredCountries"
+              :key="country"
+              role="option"
+              @click="selectOption(country)">
+              {{ country }}
+            </li>
+          </ul>
+        </div>
+      </Transition>
 
-    <div class="button-container">
-      <button
-        :class="{ 'button-primary': !countries, 'button-normal': countries }"
-        @click="getLocationData">
-        <span v-if="weatherStore.loading">Loading...</span>
-        <span v-else>{{ countries ? "Get Weather" : "Get City" }}</span>
-      </button>
-      <button v-show="countries" @click="resetAll" class="button-reset">
-        Reset
-      </button>
-      <button @click="goBack">Back</button>
+      <div class="country-display-div" v-if="countries" aria-live="polite">
+        <h2 class="country-display">
+          <strong>Country: </strong> {{ countries[0].name }}
+        </h2>
+      </div>
+
+      <label for="selectedPlaceId">city</label>
+      <select
+        v-model="selectedPlaceId"
+        :disabled="!countries || countries.length === 0"
+        id="selectedPlaceId"
+        name="city">
+        <option disabled :value="null">select a city</option>
+        <option
+          v-for="country in countries"
+          :key="country.name"
+          :value="country.place_id">
+          {{ country.name }}
+        </option>
+      </select>
+
+      <!-- Error message if weather data for the selected country is not available -->
+      <Transition name="error-fade">
+        <p v-if="weatherError" class="error-message">
+          <span v-if="weatherStore.loading">Loading...</span>
+          <span v-else-if="!countries?.length && selectedCountry"
+            >No cities found for this country.</span
+          >
+          <span v-else
+            >Error: Unable to retrieve weather data. Please try again.</span
+          >
+          <button
+            @click="getLocationData"
+            :disabled="weatherStore.loading"
+            aria-label="Retry getting location data">
+            Retry
+          </button>
+        </p>
+      </Transition>
+
+      <div class="button-container">
+        <button
+          :class="{ 'button-primary': !countries, 'button-normal': countries }"
+          @click="getLocationData">
+          <span v-if="weatherStore.loading">Loading...</span>
+          <span v-else>{{ countries ? "Get Weather" : "Get City" }}</span>
+        </button>
+        <button v-show="countries" @click="resetAll" class="button-reset">
+          Reset
+        </button>
+        <button @click="goBack">Back</button>
+      </div>
     </div>
-  </div>
+  </Transition>
 </template>
 
 <script setup>
@@ -202,21 +212,55 @@ function goBack() {
 }
 </script>
 <style scoped>
+.from-slide-enter-active,
+.from-slide-leave-active {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
+}
+.from-slide-enter-from {
+  opacity: 0;
+  transform: translateY(-40px);
+}
+.from-slide-enter-form {
+  opacity: 0;
+  transform: translateY(-40px);
+}
+.dropdown-fade-enter-active,
+.dropdown-fade-leave-active {
+  transition: all 0.2s ease;
+}
+.dropdown-fade-enter-from,
+.dropdown-fade-leave-to {
+  opacity: 0;
+  transform: translate(10px);
+}
+.error-fade-enter-active,
+.error-fade-leave-active {
+  transition: all 0.3s ease;
+}
+.error-fade-enter-from,
+.error-fade-leave-active {
+  transition: all 0.3 ease;
+}
+
+.error-fade-enter-from,
+.error-fade-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
 .search-country {
   width: 100%;
   max-width: 400px;
-  position: absolute;
-  padding: 1em 0.8em;
-  background: var(--background-color);
+  position: relative;
+  padding: 1em 1em;
+  background: var();
   border-radius: 15px;
   box-shadow: var(--box-shadow);
+  background-color: var(--background-color);
   text-align: center;
   color: var(--text-color);
   font-family: "Arial", sans-serif;
-  transition: background 0.3s ease-in-out;
-  z-index: 2; /* Ensure search input is above dropdown */
 }
-
 input {
   width: 80%;
   padding: 12px 15px;
@@ -317,38 +361,9 @@ select:focus {
   flex-direction: column;
 }
 
-button {
-  background-color: #ffffff;
-  color: var(--secondary-color);
-  border: 2px solid var(--secondary-color);
-  border-radius: 8px;
-  padding: 12px 30px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.26s ease;
-  width: 180px;
-  font-weight: 500;
-  text-transform: uppercase;
-}
-
-button:hover {
-  background-color: var(--secondary-color);
-  color: white;
-  transform: translateY(-1px);
-}
-
-button:active {
-  transform: translateY(1px);
-}
-
-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.7);
-}
-
 .button-primary {
   background-color: var(--secondary-color);
-  color: white;
+  color: #ffffff;
   border: 2px solid var(--secondary-color);
 }
 
@@ -361,12 +376,6 @@ button:focus {
   background-color: #ffffff;
   color: var(--secondary-color);
   border: 2px solid var(--secondary-color);
-}
-
-.button-secondary {
-  background-color: #eeeeee;
-  color: #888888;
-  border: 2px solid #888888;
 }
 
 h1 {

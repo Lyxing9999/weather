@@ -1,13 +1,9 @@
 <template>
   <div class="weather-page">
-    <h1>Weather for {{ selectedCountry }}</h1>
-
-    <!-- Your weather-related content goes here -->
+    <h1>Weather for Kaka</h1>
   </div>
 </template>
 
 <script setup></script>
 
-<style scoped>
-/* Your CSS here */
-</style>
+<style scoped></style>

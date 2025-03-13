@@ -72,6 +72,48 @@ export const useCountryWeatherStore = defineStore("weather", () => {
       }
     );
   }
+  const mapWeatherIcon = {
+    1: "not-available.svg", // Not available
+    2: "clear-day.svg", // Sunny
+    3: "partly-cloudy-day.svg", // Mostly sunny
+    4: "partly-cloudy-day.svg", // Partly sunny
+    5: "cloudy.svg", // Mostly cloudy
+    6: "cloudy.svg", // Cloudy
+    7: "overcast-day.svg", // Overcast
+    8: "overcast-low-clouds.svg", // Overcast with low clouds
+    9: "fog-day.svg", // Fog
+    10: "rain.svg", // Light rain
+    11: "rain.svg", // Rain
+    12: "possible-rain.svg", // Possible rain
+    13: "rain-shower.svg", // Rain shower
+    14: "thunderstorms-day.svg", // Thunderstorm
+    15: "local-thunderstorms-day.svg", // Local thunderstorms
+    16: "snowflake.svg", // Light snow
+    17: "snow.svg", // Snow
+    18: "possible-snow.svg", // Possible snow
+    19: "snow-shower.svg", // Snow shower
+    20: "rain-and-snow.svg", // Rain and snow
+    21: "possible-rain-and-snow.svg", // Possible rain and snow
+    22: "rain-and-snow.svg", // Rain and snow
+    23: "freezing-rain.svg", // Freezing rain
+    24: "possible-freezing-rain.svg", // Possible freezing rain
+    25: "hail.svg", // Hail
+    26: "clear-night.svg", // Clear (night)
+    27: "partly-cloudy-night.svg", // Mostly clear (night)
+    28: "partly-cloudy-night.svg", // Partly clear (night)
+    29: "overcast-night.svg", // Mostly cloudy (night)
+    30: "overcast-night.svg", // Cloudy (night) (same icon as 29)
+    31: "overcast-low-clouds-night.svg", // Overcast with low clouds (night)
+    32: "rain-shower-night.svg", // Rain shower (night)
+    33: "local-thunderstorms-night.svg", // Local thunderstorms (night)
+    34: "snow-shower-night.svg", // Snow shower (night)
+    35: "rain-and-snow-night.svg", // Rain and snow (night)
+    36: "possible-freezing-rain-night.svg", // Possible freezing rain (night)
+  };
+
+  function getWeatherIconById(iconId) {
+    return mapWeatherIcon[iconId] || "not-available.svg";
+  }
 
   return {
     weatherData,
@@ -84,5 +126,6 @@ export const useCountryWeatherStore = defineStore("weather", () => {
     lon,
     loading,
     isLocationAccessRequested,
+    getWeatherIconById,
   };
 });
