@@ -1,18 +1,13 @@
 :root {
-  --primary-gradient: linear-gradient(
-    135deg,
-    #2c3e50,
-    #3498db
-  ); /* Dark slate to bright blue */
-  --secondary-color: #4a90e2; /* Dark slate blue */
-  --text-light: rgba(236, 240, 241, 0.8); /* Slightly transparent light text */
+  --primary-gradient: linear-gradient(135deg, #2c3e50, #3498db);
+  --secondary-color: #4a90e2;
+  --text-light: rgba(236, 240, 241, 0.8);
 
-  --accent-color: #3498db; /* Bright blue */
-  --shadow: 0px 15px 25px rgba(0, 0, 0, 0.3); /* Shadow */
-  --blur-bg: rgba(255, 255, 255, 0.6); /* Blur background */
+  --accent-color: #3498db;
+  --shadow: 0px 15px 25px rgba(0, 0, 0, 0.3);
+  --blur-bg: rgba(255, 255, 255, 0.6);
   --background-color: #f0f8ff;
 
-  /* Weather Color Variables */
   --wx-text-primary: #2c3e50;
   --wx-accent: #6c8ea4;
   --wx-text-secondary: #7f8c8d;
@@ -39,7 +34,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
+  width: 100%;
   height: 100%;
 }
 

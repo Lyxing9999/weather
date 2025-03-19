@@ -1,10 +1,11 @@
 <template>
-  <!-- search country -->
+  <!-- Search Country -->
   <Transition name="from-slide">
     <div class="search-country" ref="searchBox">
       <h1>Search for Country</h1>
       <input
         name="input"
+        autocomplete="off"
         v-model="selectedCountry"
         placeholder="Search"
         @focus="dropdownVisible = true"
@@ -19,6 +20,7 @@
           <ul
             v-if="dropdownVisible && filteredCountries.length > 0"
             class="dropdown-list"
+            aria-live="polite"
             role="listbox">
             <li
               v-for="country in filteredCountries"
@@ -31,24 +33,18 @@
         </div>
       </Transition>
 
-      <div class="country-display-div" v-if="countries" aria-live="polite">
-        <h2 class="country-display">
-          <strong>Country: </strong> {{ countries[0].name }}
-        </h2>
-      </div>
-
-      <label for="selectedPlaceId">city</label>
+      <label for="selectedPlaceId">City</label>
       <select
         v-model="selectedPlaceId"
-        :disabled="!countries || countries.length === 0"
+        :disabled="!cities || cities.length === 0"
         id="selectedPlaceId"
         name="city">
-        <option disabled :value="null">select a city</option>
+        <option disabled :value="null">Select a city</option>
         <option
-          v-for="country in countries"
-          :key="country.name"
-          :value="country.place_id">
-          {{ country.name }}
+          v-for="(city, index) in cities"
+          :key="index"
+          :value="city.place_id">
+          {{ city.name }}
         </option>
       </select>
 
@@ -56,7 +52,7 @@
       <Transition name="error-fade">
         <p v-if="weatherError" class="error-message">
           <span v-if="weatherStore.loading">Loading...</span>
-          <span v-else-if="!countries?.length && selectedCountry"
+          <span v-else-if="!cities?.length && selectedCountry"
             >No cities found for this country.</span
           >
           <span v-else
@@ -73,12 +69,12 @@
 
       <div class="button-container">
         <button
-          :class="{ 'button-primary': !countries, 'button-normal': countries }"
+          :class="{ 'button-primary': !cities, 'button-normal': cities }"
           @click="getLocationData">
           <span v-if="weatherStore.loading">Loading...</span>
-          <span v-else>{{ countries ? "Get Weather" : "Get City" }}</span>
+          <span v-else>{{ cities ? "Get Weather" : "Search Cities" }}</span>
         </button>
-        <button v-show="countries" @click="resetAll" class="button-reset">
+        <button v-show="cities" @click="resetAll" class="button-reset">
           Reset
         </button>
         <button @click="goBack">Back</button>
@@ -94,10 +90,10 @@ import { debounce } from "lodash-es";
 import { useCountryWeatherStore } from "@/stores/countryStore";
 import { useRouter } from "vue-router";
 
-//Use Store
+// Use Store
 const weatherStore = useCountryWeatherStore();
 
-//User Router
+// User Router
 const router = useRouter();
 
 // Reactive state
@@ -106,7 +102,7 @@ const dropdownVisible = ref(false);
 const countriesList = ref([]);
 const searchBox = ref(null);
 const weatherError = ref(false);
-const countries = ref(null);
+const cities = ref(null);
 const selectedPlaceId = ref(null);
 
 // Fetch country options from the API
@@ -115,23 +111,26 @@ async function getCountryOptions() {
   const restCountriesUrl = "https://restcountries.com/v3.1/all";
   try {
     const response = await axios.get(restCountriesUrl);
-    const data = response.data;
-    countriesList.value = data.map((item) => item.name.common.toLowerCase());
+    countriesList.value = response.data.map((item) => item.name.common);
   } catch (error) {
     console.error("Error fetching countries:", error);
   }
 }
-// Mounted CountryOptions to find all country
+
+// Mounted CountryOptions to fetch all countries
 onMounted(getCountryOptions);
+
 // Filter countries based on the input value
 const filteredCountries = computed(() => {
-  const search = selectedCountry.value.toLowerCase();
-  return search
-    ? countriesList.value.filter((country) => country.includes(search))
+  const searchQuery = selectedCountry.value.toLowerCase();
+  return searchQuery
+    ? countriesList.value.filter((country) =>
+        country.toLowerCase().includes(searchQuery)
+      )
     : [];
 });
 
-// When the user selects a country from the dropdown, set the input value to the selected country
+// When the user selects a country from the dropdown, set the input value
 function selectOption(country) {
   selectedCountry.value = country;
   dropdownVisible.value = false;
@@ -143,6 +142,7 @@ function handleClickOutside(event) {
     dropdownVisible.value = false;
   }
 }
+
 // Attach and remove event listeners
 onMounted(() => document.addEventListener("click", handleClickOutside));
 onUnmounted(() => document.removeEventListener("click", handleClickOutside));
@@ -153,33 +153,33 @@ const toggleDropdown = debounce(() => {
     !!selectedCountry.value && filteredCountries.value.length > 0;
 }, 100);
 
-//get weatherLocation
+// Get weather location data
 async function getLocationData() {
   if (!selectedCountry.value) {
     weatherError.value = true;
     return;
   }
+  if (weatherStore.placeId) {
+    await weatherStore.getWeatherData();
+    if (weatherStore.isWeatherApiSuccessful) {
+      router.push({ path: "/weather", query: { refresh: Date.now() } });
+      return;
+    }
+  }
+
   weatherStore.loading = true;
   weatherError.value = false;
   try {
     const encodedCountry = encodeURIComponent(selectedCountry.value.trim());
     const locationApiUrl = `https://www.meteosource.com/api/v1/free/find_places?text=${encodedCountry}&language=en&key=${process.env.VUE_APP_API_KEY}`;
-    console.log("Weather API URL:", locationApiUrl);
     const response = await axios.get(locationApiUrl);
     if (!response.data?.length) throw new Error("No data found.");
-    weatherError.value = false;
-    countries.value = response.data;
-
-    weatherStore.placeId = selectedPlaceId.value;
+    cities.value = response.data;
     weatherStore.lat = null;
     weatherStore.lon = null;
     weatherStore.loading = false;
-    await weatherStore.getWeatherData();
-    if (countries.value.length > 0) {
-      selectedPlaceId.value = countries.value[0].place_id;
-    }
-    if (weatherStore.isWeatherApiSuccessful) router.push("/weather");
-    return;
+    selectedPlaceId.value = cities.value[0]?.place_id || null;
+    weatherStore.placeId = selectedPlaceId.value;
   } catch (error) {
     console.error("API Error:", error);
     weatherError.value = true;
@@ -188,29 +188,54 @@ async function getLocationData() {
     weatherStore.loading = false;
   }
 }
-const isCountryOrCitySelected = computed(() => selectedPlaceId.value);
 
+// Check if a country or city has been selected
+const isCountryOrCitySelected = computed(
+  () => selectedPlaceId.value || weatherStore.loading
+);
+
+// Reset the form
 function resetAll() {
   selectedCountry.value = "";
   selectedPlaceId.value = null;
   weatherError.value = false;
   dropdownVisible.value = false;
   weatherStore.loading = false;
-  countries.value = null;
+  cities.value = null;
 }
-watch(countries, (newCountries) => {
-  if (newCountries && newCountries.length > 0) {
-    selectedPlaceId.value = newCountries[0].placeId;
-  } else {
-    selectedPlaceId.value = null;
+
+// Watch for changes in selected country
+watch(selectedCountry, (newSelectedCountry) => {
+  if (newSelectedCountry) {
+    weatherStore.placeId = null;
   }
 });
 
+// Watch for changes in selected place ID (city)
+watch(selectedPlaceId, (newPlaceId) => {
+  if (newPlaceId) {
+    const selectedCity = cities.value.find(
+      (city) => city.place_id === newPlaceId
+    );
+    if (selectedCity) {
+      weatherStore.weatherCountry = selectedCity.country || "Unknown";
+      weatherStore.weatherCity = selectedCity.name;
+    }
+  }
+});
+
+// Emit goBack event
 const emit = defineEmits(["goBack"]);
 function goBack() {
+  console.log("weatherStore.country:", weatherStore.country);
+  console.log("weatherStore.cities:", weatherStore.cities);
+  if (weatherStore.country) selectedCountry.value = weatherStore.country;
+  if (weatherStore.cities) selectedPlaceId.value = weatherStore.cities;
+
   emit("goBack");
 }
 </script>
+
 <style scoped>
 .from-slide-enter-active,
 .from-slide-leave-active {
@@ -249,17 +274,18 @@ function goBack() {
   transform: scale(0.95);
 }
 .search-country {
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   max-width: 400px;
   position: relative;
-  padding: 1em 1em;
-  background: var();
   border-radius: 15px;
   box-shadow: var(--box-shadow);
   background-color: var(--background-color);
   text-align: center;
   color: var(--text-color);
+  padding: 1em;
   font-family: "Arial", sans-serif;
+  z-index: 999999;
 }
 input {
   width: 80%;
@@ -323,10 +349,6 @@ input:focus {
   transition: opacity 0.3s ease-in-out;
 }
 
-.country-display {
-  font-size: 1.6rem;
-}
-
 label[for="selectedPlaceId"] {
   display: block;
   margin-top: 1rem;
@@ -388,13 +410,8 @@ h2 {
   font-size: 1.7rem;
 }
 
-.country-display strong {
-  color: var(--primary-color);
-}
-
 h1,
 input,
-.country-display,
 select {
   margin-top: 1.4em;
 }
@@ -454,7 +471,7 @@ select option:disabled {
 
   .dropdown {
     left: 50%;
-    transform: translateX(-10%); /* Center dropdown */
+    transform: translateX(-10%);
   }
   .button-container {
     margin-top: 1.2rem;
@@ -463,7 +480,7 @@ select option:disabled {
     width: 90%;
   }
   button {
-    margin: 6px; /* Slightly smaller margin on mobile */
+    margin: 6px;
   }
 }
 

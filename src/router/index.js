@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
-import WeatherPageView from "@/views/WeatherPageView.vue";
 import HomeView from "@/views/HomeView.vue";
+import WeatherPage from "@/components/WeatherPage.vue";
+import Next7Days from "@/components/Next7Days.vue";
 const routes = [
   {
     path: "/",
@@ -10,12 +11,16 @@ const routes = [
   {
     path: "/weather",
     name: "WeatherPage",
-    component: WeatherPageView,
+    component: WeatherPage,
+  },
+  {
+    path: "/Next7Days",
+    name: "Next7Days",
+    component: Next7Days,
   },
 ];
 const router = createRouter({
   history: createWebHistory(),
   routes,
 });
-
 export default router;
