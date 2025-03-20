@@ -1,27 +1,29 @@
 <template>
-  <div class="full-screen">
-    <!-- animation background -->
-    <div id="animation-bg" class="animation-bg"></div>
-    <!-- Buttons only render when isCountrySelectVisible is false -->
-    <div v-if="!isCountrySelectVisible" class="buttons">
-      <button class="option-button-toggle" @click="toggleCountrySelect">
-        Select Country
-      </button>
-      <button class="option-button-get-weather" @click="getWeatherData">
-        <span v-if="weatherStore.loading" class="loading-text">
-          <div class="loader"></div>
-          Loading...
-        </span>
-        <span v-else>View Forecast</span>
-      </button>
-      <div
-        v-if="weatherStore.isLocationAccessRequested"
-        class="location-denied-message">
-        <p>Please allow location access to get the weather information.</p>
-        <button @click="getWeatherData">Retry</button>
+  <!-- animation background -->
+  <div ref="animationContainer" class="animation-bg"></div>
+  <Transition name="home-view" appear>
+    <div v-if="!loading" class="full-screen">
+      <!-- Buttons only render when isCountrySelectVisible is false -->
+      <div v-if="!isCountrySelectVisible" class="buttons">
+        <button class="option-button-toggle" @click="toggleCountrySelect">
+          Select Country
+        </button>
+        <button class="option-button-get-weather" @click="getWeatherData">
+          <span v-if="weatherStore.loading" class="loading-text">
+            <div class="loader"></div>
+            Loading...
+          </span>
+          <span v-else>View Forecast</span>
+        </button>
+        <div
+          v-if="weatherStore.isLocationAccessRequested"
+          class="location-denied-message">
+          <p>Please allow location access to get the weather information.</p>
+          <button @click="getWeatherData">Retry</button>
+        </div>
       </div>
     </div>
-  </div>
+  </Transition>
 </template>
 
 <script setup>
@@ -34,9 +36,9 @@ import animationData from "@/assets/Animation-BG.json";
 // Reactive state and stores
 const weatherStore = useCountryWeatherStore();
 const router = useRouter();
-
+const loading = ref(true);
 const isCountrySelectVisible = ref(false);
-
+const animationContainer = ref("");
 // Toggle the visibility of the country select component
 const toggleCountrySelect = () => {
   weatherStore.isLocationAccessRequested = false;
@@ -72,26 +74,32 @@ onMounted(async () => {
 });
 onMounted(() => {
   lottie.loadAnimation({
-    container: document.getElementById("animation-bg"),
+    container: animationContainer.value,
     renderer: "svg",
     loop: true,
     autoplay: true,
     animationData: animationData,
   });
 });
+onMounted(() => {
+  setTimeout(() => {
+    loading.value = false;
+  }, 100);
+});
 </script>
-<style>
+<style scoped>
 .full-screen {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-image: var(--background-color);
   text-align: center;
   position: relative;
   overflow: hidden;
+  z-index: 0;
 }
 
 .animation-bg {
@@ -111,7 +119,6 @@ onMounted(() => {
   margin-top: 300px;
   width: 100%;
   max-width: 600px;
-  z-index: 999;
 }
 .option-button-toggle,
 .option-button-get-weather {
@@ -124,6 +131,7 @@ onMounted(() => {
   cursor: pointer;
   transition: all 0.28s ease;
   width: 200px;
+
   box-shadow: var(--box-shadow);
   text-transform: uppercase;
   font-weight: 500;
@@ -148,6 +156,7 @@ onMounted(() => {
   border: 1px solid #ff0000;
   border-radius: 7px;
 }
+
 .location-denied-message button {
   background-color: #ff0000;
   color: white;
@@ -155,6 +164,148 @@ onMounted(() => {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.loading-enter-active,
+.loading-leave-active {
+  transition:
+    opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.loading-enter-from,
+.loading-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.home-view-enter-active {
+  transition: all 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.home-view-leave-active {
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.home-view-enter-from,
+.home-view-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.buttons {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.option-button-toggle,
+.option-button-get-weather {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.option-button-toggle:before,
+.option-button-get-weather:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.4s ease;
+}
+
+.option-button-toggle:hover,
+.option-button-get-weather:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.option-button-toggle:hover:before,
+.option-button-get-weather:hover:before {
+  left: 100%;
+}
+
+.option-button-toggle:active,
+.option-button-get-weather:active {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.loading > div {
+  margin-bottom: 20px;
+  font-size: 24px;
+  animation: pulse 3s infinite;
+}
+
+.loading-svg {
+  animation: floatAnimation 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes floatAnimation {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.loader {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 500px) {
@@ -167,18 +318,21 @@ onMounted(() => {
   .buttons {
     flex-direction: column;
     gap: 15px;
-    max-width: 70%;
+    width: 100%;
     top: 25%;
+  }
+  .option-button-toggle,
+  .option-button-get-weather {
+    width: 80%;
+    padding: 1em;
+    font-size: 1rem;
   }
   .option-button {
     width: 100%;
     padding: 14px 30px;
     font-size: 1.1rem;
   }
-  .option-button-toggle:hover {
-    background-color: #ffffff;
-    color: var(--secondary-color-hover);
-  }
+
   .location-denied-message {
     font-size: 1rem;
   }

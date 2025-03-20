@@ -19,9 +19,11 @@ export const useCountryWeatherStore = defineStore("weather", () => {
   //URL
   const API_KEY = process.env.VUE_APP_API_KEY;
   const WEATHER_URL = "https://www.meteosource.com/api/v1/free/point";
+  const NEAREST_PLACE_URL =
+    "https://www.meteosource.com/api/v1/free/nearest_place";
 
   async function getWeatherData() {
-    console.log("API Key:", API_KEY); // Check if API key is correctly loaded
+    console.log("API Key:", API_KEY);
     if (loading.value) return;
     weatherData.value = null;
     isWeatherApiSuccessful.value = false;
@@ -55,7 +57,7 @@ export const useCountryWeatherStore = defineStore("weather", () => {
       loading.value = false;
     }
   }
-
+  // check current Location by lat lon
   async function getCurrentLocation() {
     if (!navigator.geolocation) {
       alert("Geolocation is not supported by your browser.");
@@ -115,10 +117,9 @@ export const useCountryWeatherStore = defineStore("weather", () => {
     }
   }
 
+  // Get country and city based on latitude and longitude
   async function getCountryByLatLon() {
     const API_KEY = process.env.VUE_APP_API_KEY;
-    const NEAREST_PLACE_URL =
-      "https://www.meteosource.com/api/v1/free/nearest_place";
     try {
       const response = await axios.get(NEAREST_PLACE_URL, {
         params: {
@@ -135,10 +136,12 @@ export const useCountryWeatherStore = defineStore("weather", () => {
       console.error(error);
     }
   }
+  // Lifecycle hook
   onMounted(async () => {
     await getCurrentLocation();
     await getCountryByLatLon();
   });
+
   const WeatherIcon = {
     1: "not-available.svg",
     2: "clear-day.svg",

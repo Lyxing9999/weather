@@ -6,6 +6,7 @@
       <img class="loading-svg" src="@/assets/Loading.svg" alt="" />
     </div>
   </Transition>
+
   <!-- weather page show -->
   <Transition name="weather-page">
     <div v-if="!loading" class="weather-page-view">

@@ -47,7 +47,7 @@ button {
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.26s ease;
-  width: 180px;
+  width: 100%;
   font-weight: 500;
   text-transform: uppercase;
 }

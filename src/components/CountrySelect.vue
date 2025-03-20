@@ -58,9 +58,7 @@
           <span v-else-if="!cities?.length && selectedCountry"
             >No cities found for this country.</span
           >
-          <span v-else
-            >Error: Unable to retrieve weather data. Please try again.</span
-          >
+          <span v-else>Error: Unable to retrieve weather data.</span>
           <button
             @click="getLocationData"
             :disabled="weatherStore.loading"
@@ -69,19 +67,23 @@
           </button>
         </p>
       </Transition>
-
-      <div class="button-container">
-        <button
-          :class="{ 'button-primary': !cities, 'button-normal': cities }"
-          @click="getLocationData">
-          <span v-if="weatherStore.loading">Loading...</span>
-          <span v-else>{{ cities ? "Get Weather" : "Search Cities" }}</span>
-        </button>
-        <button v-show="cities" @click="resetAll" class="button-reset">
-          Reset
-        </button>
-        <button @click="goBack">Back</button>
-      </div>
+      <Transition name="button-fade" appear>
+        <div class="button-container buttons">
+          <button
+            :class="{ 'button-primary': cities, 'button-normal': !cities }"
+            @click="getLocationData">
+            <span v-if="weatherStore.loading">Loading...</span>
+            <span v-else>{{ cities ? "Get Weather" : "Search Cities" }}</span>
+          </button>
+          <button
+            v-show="cities"
+            @click="resetAll"
+            class="button-reset buttons">
+            Reset
+          </button>
+          <button class="button-back" @click="goBack">Back</button>
+        </div>
+      </Transition>
     </div>
   </Transition>
 </template>
@@ -280,18 +282,14 @@ function goBack() {
   background-color: var(--background-color);
   text-align: center;
   color: var(--text-color);
+  top: 10%;
   padding: 1em;
-  padding-block: 3em;
+  padding-block: 4em;
   font-family: "Arial", sans-serif;
   z-index: 999999;
-  top: 10%;
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.1),
     0 4px 20px rgba(0, 0, 0, 0.02);
-  transform: translateY(-2px);
-  transition:
-    transform 0.3s ease-in-out,
-    box-shadow 0.3s ease-in-out;
 }
 .from-slide-enter-active {
   transition: all 0.4s ease-out;
@@ -301,7 +299,6 @@ function goBack() {
   transform: translateY(-100%);
 }
 
-/* Leaving: Slide up */
 .from-slide-leave-active {
   transition: all 0.2s ease-in;
 }
@@ -309,12 +306,7 @@ function goBack() {
   opacity: 0;
   transform: translateY(-100%);
 }
-.search-country:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 15px 30px rgba(0, 0, 0, 0.2),
-    0 6px 25px rgba(0, 0, 0, 0.05);
-}
+
 input {
   width: 80%;
   padding: 12px 15px;
@@ -331,6 +323,9 @@ input {
 input:focus {
   border-color: var(--primary-color);
   transform: scale(1.02);
+  box-shadow:
+    0 0 0 3px rgba(var(--primary-rgb), 0.2),
+    0 4px 20px rgba(var(--primary-rgb), 0.1);
 }
 
 .dropdown {
@@ -415,6 +410,7 @@ select:focus {
   background-color: var(--secondary-color);
   color: #ffffff;
   border: 2px solid var(--secondary-color);
+  font-size: 0.8rem;
 }
 
 .button-primary:hover {
@@ -431,6 +427,7 @@ select:focus {
   background-color: var(--secondary-color-hover);
   color: #ffffff;
 }
+
 h1 {
   color: var(--primary-color);
   font-size: 2rem;
@@ -485,36 +482,6 @@ select option:disabled {
   pointer-events: none;
 }
 
-@media (max-width: 500px) {
-  h1 {
-    font-size: 1.8rem;
-  }
-  .country-display {
-    font-size: 1.3rem;
-  }
-  .search-country {
-    width: 80%;
-  }
-  input {
-    width: 80%;
-    font-size: 14px;
-  }
-
-  .dropdown {
-    left: 50%;
-    transform: translateX(-10%);
-  }
-  .button-container {
-    margin-top: 1.2rem;
-  }
-  .dropdown-list {
-    width: 90%;
-  }
-  button {
-    margin: 6px;
-  }
-}
-
 .error-message {
   color: red;
   font-size: 14px;
@@ -553,5 +520,77 @@ select:disabled,
 select option:disabled {
   background-color: #eee;
   pointer-events: none;
+}
+
+.buttons {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.buttons {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.buttons:before,
+.buttons-weather:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.4s ease;
+}
+
+.buttons:before,
+.buttons:before {
+  left: 100%;
+}
+
+.buttons:active,
+.buttons:active {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 500px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+  .country-display {
+    font-size: 1.3rem;
+  }
+  .search-country {
+    width: 80%;
+  }
+  input {
+    width: 80%;
+    font-size: 14px;
+  }
+
+  .dropdown {
+    left: 50%;
+    transform: translateX(-10%);
+  }
+  .button-container {
+    margin-top: 1.2rem;
+  }
+  .dropdown-list {
+    width: 90%;
+  }
+  button {
+    margin: 6px;
+  }
 }
 </style>
