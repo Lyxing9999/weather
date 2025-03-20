@@ -257,15 +257,11 @@ function goBack() {
   opacity: 0;
   transform: translate(10px);
 }
+
 .error-fade-enter-active,
 .error-fade-leave-active {
   transition: all 0.3s ease;
 }
-.error-fade-enter-from,
-.error-fade-leave-active {
-  transition: all 0.3s ease;
-}
-
 .error-fade-enter-from,
 .error-fade-leave-to {
   opacity: 0;
@@ -286,11 +282,12 @@ function goBack() {
   padding: 1em;
   padding-block: 4em;
   font-family: "Arial", sans-serif;
-  z-index: 999999;
+  z-index: 10;
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.1),
     0 4px 20px rgba(0, 0, 0, 0.02);
 }
+
 .from-slide-enter-active {
   transition: all 0.4s ease-out;
 }
@@ -313,7 +310,6 @@ input {
   font-size: 16px;
   border-radius: 25px;
   border: 2px solid #ddd;
-  outline: none;
   background-color: transparent;
   color: var(--text-color);
   box-shadow: var(--box-shadow);
@@ -345,11 +341,6 @@ input:focus {
   box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.15);
   overflow-y: auto;
   list-style-type: none;
-  opacity: 0;
-  visibility: hidden;
-  transition:
-    opacity 0.3s ease,
-    visibility 0.3s ease;
 }
 
 .dropdown-list li {
@@ -364,12 +355,6 @@ input:focus {
 .dropdown-list li:hover {
   background-color: var(--secondary-color);
   color: white;
-}
-
-.dropdown-list[role="listbox"] {
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.3s ease-in-out;
 }
 
 label[for="selectedPlaceId"] {
@@ -387,7 +372,6 @@ select {
   font-size: 16px;
   border-radius: 25px;
   border: 2px solid #ddd;
-  outline: none;
   background-color: #f9f9f9;
   color: var(--text-color);
   box-shadow: var(--box-shadow);
@@ -397,35 +381,6 @@ select {
 select:focus {
   border-color: var(--primary-color);
   transform: scale(1.05);
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-.button-primary {
-  background-color: var(--secondary-color);
-  color: #ffffff;
-  border: 2px solid var(--secondary-color);
-  font-size: 0.8rem;
-}
-
-.button-primary:hover {
-  background-color: var(--secondary-color-hover);
-  transform: scale(1.02);
-}
-
-.button-normal {
-  background-color: #ffffff;
-  color: var(--secondary-color);
-  border: 2px solid var(--secondary-color);
-}
-.button-normal:hover {
-  background-color: var(--secondary-color-hover);
-  color: #ffffff;
 }
 
 h1 {
@@ -521,28 +476,24 @@ select option:disabled {
   background-color: #eee;
   pointer-events: none;
 }
-
-.buttons {
-  opacity: 0;
-  transform: translateY(30px);
-  animation: fadeInUp 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s forwards;
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.buttons {
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+.button-primary {
+  background-color: var(--secondary-color);
+  color: #ffffff;
+  border: 2px solid var(--secondary-color);
+  font-size: 0.8rem;
   position: relative;
   overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.buttons:before,
-.buttons-weather:before {
+.button-primary:before {
   content: "";
   position: absolute;
   top: 0;
@@ -553,17 +504,53 @@ select option:disabled {
   transition: all 0.4s ease;
 }
 
-.buttons:before,
-.buttons:before {
+.button-primary:hover {
+  background-color: var(--secondary-color-hover);
+  transform: scale(1.02);
+}
+
+.button-primary:hover:before {
   left: 100%;
 }
 
-.buttons:active,
-.buttons:active {
-  transform: translateY(-2px);
+.button-primary:active {
+  transform: scale(1);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
 
+.button-normal {
+  background-color: #ffffff;
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.button-normal:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.4s ease;
+}
+
+.button-normal:hover {
+  background-color: var(--secondary-color-hover);
+  color: #ffffff;
+}
+
+.button-normal:hover:before {
+  left: 100%;
+}
+
+.button-normal:active {
+  transform: scale(1);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
 @media (max-width: 500px) {
   h1 {
     font-size: 1.8rem;

@@ -1,6 +1,6 @@
 <template>
   <!-- animation background -->
-  <div ref="animationContainer" class="animation-bg"></div>
+  <div ref="animationContainer" class="animation-bg"><LottieAnimation /></div>
   <Transition name="home-view" appear>
     <div v-if="!loading" class="full-screen">
       <!-- Buttons only render when isCountrySelectVisible is false -->
@@ -30,15 +30,12 @@
 import { ref, onMounted } from "vue";
 import { useCountryWeatherStore } from "@/stores/countryStore";
 import { useRouter } from "vue-router";
-import lottie from "lottie-web";
-import animationData from "@/assets/Animation-BG.json";
-
+import LottieAnimation from "@/components/LottieAnimation.vue";
 // Reactive state and stores
 const weatherStore = useCountryWeatherStore();
 const router = useRouter();
 const loading = ref(true);
 const isCountrySelectVisible = ref(false);
-const animationContainer = ref("");
 // Toggle the visibility of the country select component
 const toggleCountrySelect = () => {
   weatherStore.isLocationAccessRequested = false;
@@ -72,20 +69,10 @@ const getWeatherData = async () => {
 onMounted(async () => {
   await weatherStore.getCurrentLocation();
 });
-onMounted(() => {
-  lottie.loadAnimation({
-    container: animationContainer.value,
-    renderer: "svg",
-    loop: true,
-    autoplay: true,
-    animationData: animationData,
-  });
-});
-onMounted(() => {
-  setTimeout(() => {
-    loading.value = false;
-  }, 100);
-});
+
+setTimeout(() => {
+  loading.value = false;
+}, 100);
 </script>
 <style scoped>
 .full-screen {
@@ -95,7 +82,7 @@ onMounted(() => {
   align-items: center;
   width: 100%;
   height: 100vh;
-  background-image: var(--background-color);
+
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -110,6 +97,7 @@ onMounted(() => {
   height: 90%;
   z-index: 0;
 }
+
 .buttons {
   display: flex;
   gap: 20px;
@@ -120,6 +108,7 @@ onMounted(() => {
   width: 100%;
   max-width: 600px;
 }
+
 .option-button-toggle,
 .option-button-get-weather {
   background-color: #ffffff;
@@ -136,19 +125,23 @@ onMounted(() => {
   text-transform: uppercase;
   font-weight: 500;
 }
+
 .option-button-toggle:hover {
   background-color: var(--secondary-color);
   color: #ffffff;
   transform: translateY(-2.5px);
 }
+
 .option-button-get-weather {
   background-color: var(--secondary-color);
   color: #ffffff;
 }
+
 .option-button-get-weather:hover {
   background-color: var(--secondary-color-hover);
   transform: translateY(-2.5px);
 }
+
 .location-denied-message {
   background-color: #ffcccc;
   padding: 5px;
@@ -321,6 +314,7 @@ onMounted(() => {
     width: 100%;
     top: 25%;
   }
+
   .option-button-toggle,
   .option-button-get-weather {
     width: 80%;
@@ -336,6 +330,7 @@ onMounted(() => {
   .location-denied-message {
     font-size: 1rem;
   }
+
   .location-denied-message button {
     font-size: 0.9rem;
   }

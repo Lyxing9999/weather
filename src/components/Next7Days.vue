@@ -169,6 +169,7 @@ const goBack = () => {
   color: var(--wx-text-muted);
   margin-top: 5px;
 }
+
 .back-button-container {
   display: flex;
   justify-content: flex-start;
@@ -180,9 +181,28 @@ const goBack = () => {
   background-color: transparent;
   border-width: 1px;
 }
+
 .back-button:hover {
   color: #fff;
   background-color: var(--secondary-color);
+}
+
+.weather-forecast-enter-active,
+.weather-forecast-leave-active {
+  transition:
+    opacity 1.5s ease-out,
+    transform 1.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  will-change: opacity, transform;
+}
+
+.weather-forecast-enter-from {
+  opacity: 0;
+  transform: translateY(20px) scale(0.97);
+}
+
+.weather-forecast-leave-to {
+  opacity: 0;
+  transform: translateY(-20px) scale(1.02);
 }
 
 @media (max-width: 768px) {
@@ -199,7 +219,7 @@ const goBack = () => {
   .weekly-title {
     font-size: 1.4em;
   }
-  .back-butto {
+  .back-button {
     padding: 5px;
   }
   .back-button-container {

@@ -152,16 +152,6 @@ function goTo7DayForecast() {
 }
 </script>
 <style>
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  font-family: "Poppins", sans-serif;
-  background: var(--background-color);
-  color: var(--wx-text-muted);
-}
 .weather-page-view {
   width: 100%;
   max-width: 1200px;
@@ -214,7 +204,7 @@ body {
   transition: transform 0.3s ease;
 }
 .country-heading:hover .location-svg.city-heading {
-  transform: scale(1.1);
+  transform: scale(1.2);
 }
 
 .weather-icon {
@@ -245,7 +235,7 @@ body {
 }
 
 .temperature {
-  font-size: 4em;
+  font-size: 3em;
   font-weight: bold;
   color: var(--wx-accent);
   display: flex;
@@ -258,13 +248,51 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-width: 40px;
-  max-width: 400px;
+  min-width: 100px;
+  max-width: 500px;
   margin-bottom: 0px;
 }
+.weather-btn-7days,
+.btn-back-home-page {
+  border: none;
+  background-color: transparent;
+  font-weight: bold;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.weather-btn-7days:before,
+.btn-back-home-page:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.4s ease;
+}
+
+.weather-btn-7days:hover,
+.btn-back-home-page:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.weather-btn-7days:hover:before,
+.btn-back-home-page:hover:before {
+  left: 100%;
+}
+
+.weather-btn-7days:active,
+.btn-back-home-page:active {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
 button {
-  font-size: 0.8em;
-  width: 150px;
+  width: 200px;
 }
 
 .container {
@@ -281,17 +309,9 @@ button {
   margin-bottom: 30px;
 }
 
-.weather-btn-7days,
-.btn-back-home-page {
-  border: none;
-  background-color: transparent;
-  font-weight: bold;
-}
-
 .contain {
   flex: 0 0 auto;
   width: 140px;
-  min-width: 140px;
   background: var(--background-color);
   border: 1px solid rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -320,6 +340,7 @@ button {
   transform: translateY(-5px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
+
 .contain h2 {
   font-size: 1em;
   color: var(--wx-text-secondary);
@@ -388,7 +409,7 @@ button {
 }
 
 .weather-page-enter-active,
-.weather-pgage-leave-active {
+.weather-page-leave-active {
   transition:
     opacity 0.7s ease-in,
     transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -401,24 +422,6 @@ button {
 }
 
 .weather-page-leave-to {
-  opacity: 0;
-  transform: translateY(-20px) scale(1.02);
-}
-
-.weather-forecast-enter-active,
-.weather-forecast-leave-active {
-  transition:
-    opacity 1.5s ease-out,
-    transform 1.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-  will-change: opacity, transform;
-}
-
-.weather-forecast-enter-from {
-  opacity: 0;
-  transform: translateY(20px) scale(0.97);
-}
-
-.weather-forecast-leave-to {
   opacity: 0;
   transform: translateY(-20px) scale(1.02);
 }
@@ -439,6 +442,7 @@ button {
 .loading-leave-from {
   opacity: 1;
 }
+
 .loading {
   width: 80%;
   display: flex;
