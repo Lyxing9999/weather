@@ -1,4 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
+import CountrySelect from "@/components/CountrySelect.vue";
 import HomeView from "@/views/HomeView.vue";
 import WeatherPage from "@/components/WeatherPage.vue";
 import Next7Days from "@/components/Next7Days.vue";
@@ -8,6 +9,12 @@ const routes = [
     name: "HomePage",
     component: HomeView,
   },
+  {
+    path: "/country-select",
+    name: "CountrySelect",
+    component: CountrySelect,
+  },
+
   {
     path: "/weather",
     name: "WeatherPage",

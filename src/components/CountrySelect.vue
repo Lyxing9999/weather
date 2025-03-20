@@ -1,7 +1,7 @@
 <template>
   <!-- Search Country -->
   <Transition name="from-slide">
-    <div class="search-country" ref="searchBox">
+    <div v-show="searchBox" class="search-country" ref="searchBox">
       <h1>Search for Country</h1>
       <input
         name="input"
@@ -16,12 +16,11 @@
 
       <!-- Dropdown -->
       <Transition name="dropdown-fade">
-        <div class="dropdown" id="country-search-list">
-          <ul
-            v-if="dropdownVisible && filteredCountries.length > 0"
-            class="dropdown-list"
-            aria-live="polite"
-            role="listbox">
+        <div
+          class="dropdown"
+          id="country-search-list"
+          v-if="dropdownVisible && filteredCountries.length > 0">
+          <ul class="dropdown-list" aria-live="polite" role="listbox">
             <li
               v-for="country in filteredCountries"
               :key="country"
@@ -50,7 +49,11 @@
 
       <!-- Error message if weather data for the selected country is not available -->
       <Transition name="error-fade">
-        <p v-if="weatherError" class="error-message">
+        <p
+          v-if="weatherError && !dropdownVisible"
+          class="error-message"
+          aria-live="assertive"
+          role="alert">
           <span v-if="weatherStore.loading">Loading...</span>
           <span v-else-if="!cities?.length && selectedCountry"
             >No cities found for this country.</span
@@ -134,6 +137,7 @@ const filteredCountries = computed(() => {
 function selectOption(country) {
   selectedCountry.value = country;
   dropdownVisible.value = false;
+  weatherError.value = false;
 }
 
 // When the user clicks outside the input or dropdown, hide the dropdown
@@ -224,32 +228,24 @@ watch(selectedPlaceId, (newPlaceId) => {
   }
 });
 
-// Emit goBack event
+// Store previous values
+let prevCountry = weatherStore.weatherCountry;
+let prevCity = weatherStore.weatherCity;
 const emit = defineEmits(["goBack"]);
 function goBack() {
-  console.log("weatherStore.country:", weatherStore.country);
-  console.log("weatherStore.cities:", weatherStore.cities);
-  if (weatherStore.country) selectedCountry.value = weatherStore.country;
-  if (weatherStore.cities) selectedPlaceId.value = weatherStore.cities;
-
+  if (
+    weatherStore.weatherCountry !== prevCountry ||
+    weatherStore.weatherCity !== prevCity
+  ) {
+    weatherStore.weatherCountry = prevCountry;
+    weatherStore.weatherCity = prevCity;
+  }
+  router.back();
   emit("goBack");
 }
 </script>
 
 <style scoped>
-.from-slide-enter-active,
-.from-slide-leave-active {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform, opacity;
-}
-.from-slide-enter-from {
-  opacity: 0;
-  transform: translateY(-40px);
-}
-.from-slide-enter-form {
-  opacity: 0;
-  transform: translateY(-40px);
-}
 .dropdown-fade-enter-active,
 .dropdown-fade-leave-active {
   transition: all 0.2s ease;
@@ -265,7 +261,7 @@ function goBack() {
 }
 .error-fade-enter-from,
 .error-fade-leave-active {
-  transition: all 0.3 ease;
+  transition: all 0.3s ease;
 }
 
 .error-fade-enter-from,
@@ -273,19 +269,51 @@ function goBack() {
   opacity: 0;
   transform: scale(0.95);
 }
+
 .search-country {
   width: 100vw;
-  height: 100vh;
   max-width: 400px;
-  position: relative;
+  position: absolute;
+  height: auto;
   border-radius: 15px;
   box-shadow: var(--box-shadow);
   background-color: var(--background-color);
   text-align: center;
   color: var(--text-color);
   padding: 1em;
+  padding-block: 3em;
   font-family: "Arial", sans-serif;
   z-index: 999999;
+  top: 10%;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.1),
+    0 4px 20px rgba(0, 0, 0, 0.02);
+  transform: translateY(-2px);
+  transition:
+    transform 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
+}
+.from-slide-enter-active {
+  transition: all 0.4s ease-out;
+}
+.from-slide-enter-from {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+/* Leaving: Slide up */
+.from-slide-leave-active {
+  transition: all 0.2s ease-in;
+}
+.from-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+.search-country:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 15px 30px rgba(0, 0, 0, 0.2),
+    0 6px 25px rgba(0, 0, 0, 0.05);
 }
 input {
   width: 80%;
@@ -302,7 +330,7 @@ input {
 
 input:focus {
   border-color: var(--primary-color);
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .dropdown {
@@ -390,7 +418,7 @@ select:focus {
 }
 
 .button-primary:hover {
-  opacity: 0.8;
+  background-color: var(--secondary-color-hover);
   transform: scale(1.02);
 }
 
@@ -399,7 +427,10 @@ select:focus {
   color: var(--secondary-color);
   border: 2px solid var(--secondary-color);
 }
-
+.button-normal:hover {
+  background-color: var(--secondary-color-hover);
+  color: #ffffff;
+}
 h1 {
   color: var(--primary-color);
   font-size: 2rem;

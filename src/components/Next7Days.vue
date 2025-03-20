@@ -1,5 +1,5 @@
 <template>
-  <Transition name="loading">
+  <Transition name="loading" appear>
     <div v-if="loading" class="loading">
       <div>Weather loading</div>
       <img class="loading-svg" src="@/assets/Loading.svg" alt="" />
@@ -13,7 +13,9 @@
         <div v-for="(day, index) in weeklyData" :key="index" class="day-card">
           <h2 class="day-name">{{ day.dayName }}</h2>
           <img :src="day.iconSrc" alt="Weather icon" class="day-icon" />
-          <h3 class="day-temp">{{ day.temp }}</h3>
+          <h3 class="day-temp">
+            {{ day.temp }} <span class="degree-symbol-hourly">&#176;</span>
+          </h3>
           <p class="day-summary">{{ day.summary }}</p>
         </div>
       </div>
@@ -90,20 +92,6 @@ const goBack = () => {
 </script>
 
 <style>
-.loading {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  color: var(--wx-loading);
-  font-size: 1.5em;
-  font-weight: bold;
-  margin: auto;
-}
-.loading-svg {
-  width: 12%;
-}
 .weekly-forecast-view {
   width: 100%;
   max-width: 1000px;

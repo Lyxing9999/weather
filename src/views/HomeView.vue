@@ -2,42 +2,29 @@
   <div class="full-screen">
     <!-- animation background -->
     <div id="animation-bg" class="animation-bg"></div>
-
-    <!-- CountrySelect component only renders when isCountrySelectVisible is true -->
-    <Transition name="slide-fade">
-      <div class="country-select" v-if="isCountrySelectVisible">
-        <CountrySelect
-          :key="isCountrySelectVisible"
-          @goBack="toggleCountrySelect" />
-      </div>
-    </Transition>
-
     <!-- Buttons only render when isCountrySelectVisible is false -->
-    <Transition name="fade-move">
-      <div v-if="!isCountrySelectVisible" class="buttons">
-        <button class="option-button-toggle" @click="toggleCountrySelect">
-          Select Country
-        </button>
-        <button class="option-button-get-weather" @click="getWeatherData">
-          <span v-if="weatherStore.loading" class="loading-text">
-            <div class="loader"></div>
-            Loading...
-          </span>
-          <span v-else>View Forecast</span>
-        </button>
-        <div
-          v-if="weatherStore.isLocationAccessRequested"
-          class="location-denied-message">
-          <p>Please allow location access to get the weather information.</p>
-          <button @click="getWeatherData">Retry</button>
-        </div>
+    <div v-if="!isCountrySelectVisible" class="buttons">
+      <button class="option-button-toggle" @click="toggleCountrySelect">
+        Select Country
+      </button>
+      <button class="option-button-get-weather" @click="getWeatherData">
+        <span v-if="weatherStore.loading" class="loading-text">
+          <div class="loader"></div>
+          Loading...
+        </span>
+        <span v-else>View Forecast</span>
+      </button>
+      <div
+        v-if="weatherStore.isLocationAccessRequested"
+        class="location-denied-message">
+        <p>Please allow location access to get the weather information.</p>
+        <button @click="getWeatherData">Retry</button>
       </div>
-    </Transition>
+    </div>
   </div>
 </template>
 
 <script setup>
-import CountrySelect from "@/components/CountrySelect.vue";
 import { ref, onMounted } from "vue";
 import { useCountryWeatherStore } from "@/stores/countryStore";
 import { useRouter } from "vue-router";
@@ -47,12 +34,14 @@ import animationData from "@/assets/Animation-BG.json";
 // Reactive state and stores
 const weatherStore = useCountryWeatherStore();
 const router = useRouter();
+
 const isCountrySelectVisible = ref(false);
 
 // Toggle the visibility of the country select component
 const toggleCountrySelect = () => {
   weatherStore.isLocationAccessRequested = false;
   isCountrySelectVisible.value = !isCountrySelectVisible.value;
+  router.push("/country-select");
 };
 
 // Weather data based on locations
@@ -91,7 +80,7 @@ onMounted(() => {
   });
 });
 </script>
-<style scoped>
+<style>
 .full-screen {
   display: flex;
   flex-direction: column;
@@ -103,46 +92,6 @@ onMounted(() => {
   text-align: center;
   position: relative;
   overflow: hidden;
-}
-.country-select {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  will-change: transform, opacity;
-  z-index: 5;
-}
-
-.slide-fade-enter-active {
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-.slide-fade-leave-active {
-  transition: all 0.25s cubic-bezier(0.55, 0.085, 0.68, 0.53);
-}
-.slide-fade-enter-from {
-  opacity: 0;
-  transform: translate(-50%, -100%);
-}
-.slide-fade-leave-to {
-  opacity: 0;
-  transform: translate(-50%, -100%);
-}
-
-.fade-move-leave-active {
-  transition: all 0.1s ease-in;
-}
-.fade-move-enter-from {
-  opacity: 0;
-  transform: translateY(40px);
-}
-.fade-move-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
 }
 
 .animation-bg {
@@ -162,7 +111,7 @@ onMounted(() => {
   margin-top: 300px;
   width: 100%;
   max-width: 600px;
-  z-index: 9999;
+  z-index: 999;
 }
 .option-button-toggle,
 .option-button-get-weather {
@@ -189,7 +138,7 @@ onMounted(() => {
   color: #ffffff;
 }
 .option-button-get-weather:hover {
-  opacity: 0.8;
+  background-color: var(--secondary-color-hover);
   transform: translateY(-2.5px);
 }
 .location-denied-message {
@@ -225,6 +174,10 @@ onMounted(() => {
     width: 100%;
     padding: 14px 30px;
     font-size: 1.1rem;
+  }
+  .option-button-toggle:hover {
+    background-color: #ffffff;
+    color: var(--secondary-color-hover);
   }
   .location-denied-message {
     font-size: 1rem;

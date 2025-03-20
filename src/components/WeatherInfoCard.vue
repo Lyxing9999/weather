@@ -40,7 +40,6 @@ defineProps({
 </script>
 
 <style scoped>
-/* Card Container */
 .card {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -53,7 +52,6 @@ defineProps({
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Wind Info Section */
 .wind-info {
   display: flex;
   flex-direction: column;
@@ -77,20 +75,19 @@ defineProps({
 .wind-info span {
   font-size: 0.9em;
   font-weight: 600;
-  color: var(--wx-text-muted); /* Muted text color */
+  color: var(--wx-text-muted);
 }
 
-/* Color and hover effects using :root colors */
 .wind-info:nth-child(1) span {
-  color: var(--accent-color); /* Blue for Wind angle */
+  color: var(--accent-color);
 }
 
 .wind-info:nth-child(2) span {
-  color: var(--wx-accent); /* Grayish-blue for Wind speed */
+  color: var(--wx-accent);
 }
 
 .wind-info:nth-child(3) span {
-  color: var(--wx-text-primary); /* Darker text for Wind direction */
+  color: var(--wx-text-primary);
 }
 
 @media (max-width: 300px) {

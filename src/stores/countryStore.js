@@ -55,31 +55,66 @@ export const useCountryWeatherStore = defineStore("weather", () => {
       loading.value = false;
     }
   }
+
   async function getCurrentLocation() {
     if (!navigator.geolocation) {
       alert("Geolocation is not supported by your browser.");
       locationDenied.value = true;
       return;
     }
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        lat.value = position.coords.latitude;
-        lon.value = position.coords.longitude;
-        placeId.value = null;
-        locationDenied.value = false;
-        isLocationAccessRequested.value = false;
-      },
-      (error) => {
+
+    // Check permission state first
+    try {
+      const permissionStatus = await navigator.permissions.query({
+        name: "geolocation",
+      });
+
+      if (permissionStatus.state === "denied") {
         alert(
-          "Location access denied. Please allow access to get weather data."
+          "Location permission is blocked. Please enable it in your settings."
         );
-        errorMessage.value =
-          "Location access denied. Please allow access to get weather data.";
-        console.error("Error getting location:", error);
         locationDenied.value = true;
+        return;
       }
-    );
+
+      // Request current position
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          lat.value = position.coords.latitude;
+          lon.value = position.coords.longitude;
+          placeId.value = null;
+          locationDenied.value = false;
+          isLocationAccessRequested.value = false;
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              alert("You denied the location request. Please allow access.");
+              break;
+            case error.POSITION_UNAVAILABLE:
+              alert("Location information is unavailable.");
+              break;
+            case error.TIMEOUT:
+              alert("Location request timed out. Try again.");
+              break;
+            default:
+              alert("An unknown error occurred while getting your location.");
+          }
+
+          errorMessage.value =
+            "Failed to get your location. Try manually entering your city.";
+          locationDenied.value = true;
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      );
+    } catch (e) {
+      console.error("Permission query failed:", e);
+      alert("Failed to check location permissions.");
+    }
   }
+
   async function getCountryByLatLon() {
     const API_KEY = process.env.VUE_APP_API_KEY;
     const NEAREST_PLACE_URL =

@@ -1,20 +1,12 @@
 <template>
-  <Transition name="loading">
+  <!-- laoding -->
+  <Transition name="loading" appear>
     <div v-if="loading" class="loading">
       <div>Weather loading</div>
       <img class="loading-svg" src="@/assets/Loading.svg" alt="" />
     </div>
   </Transition>
-
-  <!-- CountrySelect component only renders when isCountrySelectVisible is true -->
-  <Transition name="slide-fade">
-    <div class="country-select" v-if="isCountrySelectVisible">
-      <CountrySelect
-        :key="isCountrySelectVisible"
-        @goBack="toggleCountrySelect" />
-    </div>
-  </Transition>
-
+  <!-- weather page show -->
   <Transition name="weather-page">
     <div v-if="!loading" class="weather-page-view">
       <div class="weather-info">
@@ -30,7 +22,7 @@
               alt="Location icon" />
           </h3>
         </div>
-
+        <!-- weather info -->
         <h1 class="summary">{{ summary || "No summary available" }}</h1>
         <img :src="iconSrc" alt="Weather icon" class="weather-icon" />
         <p class="formatted-date">{{ formattedDate }}</p>
@@ -38,14 +30,20 @@
           {{ temperature || "No temperature available" }}
           <span class="degree-symbol">&#176;</span>
         </h1>
+        <!-- weather info card component -->
         <div class="weather-info-card">
           <WeatherInfoCard :angle="angle" :speed="speed" :dir="dir" />
         </div>
+        <!-- Button Navigation -->
         <div class="weather-button-group">
+          <button class="btn-back-home-page" @click="goBackHomePage">
+            Back
+          </button>
           <button @click="goTo7DayForecast" class="weather-btn-7days">
             Next 7 Days
           </button>
         </div>
+        <!-- Hourly Forecast -->
         <div class="container">
           <div v-for="daily in hourly" :key="daily.id" class="contain">
             <h2>{{ daily.formattedTime || "N/A" }}</h2>
@@ -63,25 +61,21 @@
 
 <script setup>
 import { useCountryWeatherStore } from "@/stores/countryStore";
-import { computed, ref } from "vue";
+import { computed, ref, onMounted } from "vue";
 import router from "@/router";
 import WeatherInfoCard from "@/components/WeatherInfoCard.vue";
-import CountrySelect from "./CountrySelect.vue";
 
 const weatherStore = useCountryWeatherStore();
 const loading = ref(true);
 const isCountrySelectVisible = ref(false);
-
-setTimeout(() => {
-  loading.value = false;
-}, 1000);
-
-const toggleCountrySelect = () => {
-  weatherStore.isLocationAccessRequested = false;
-  isCountrySelectVisible.value = !isCountrySelectVisible.value;
-};
+onMounted(() => {
+  setTimeout(() => {
+    loading.value = false;
+  }, 600);
+});
 const locationHeadingClickHandler = () => {
   isCountrySelectVisible.value = !isCountrySelectVisible.value;
+  router.push("/country-select");
 };
 
 // Get weather data
@@ -105,7 +99,7 @@ const rawDate = computed(
   () =>
     weatherStore.weatherData?.hourly?.data[0]?.date || "No current available"
 );
-
+// hourly formatting
 const hourly = computed(() => {
   return (
     weatherStore.weatherData?.hourly?.data?.map((item) => {
@@ -135,6 +129,7 @@ const formattedDate = computed(() => {
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
+      hour12: true,
     };
     return dateObj.toLocaleDateString(undefined, options);
   } else {
@@ -148,6 +143,9 @@ const angle = computed(() => wind.value?.angle);
 const dir = computed(() => wind.value?.dir);
 const speed = computed(() => wind.value?.speed);
 
+function goBackHomePage() {
+  router.push("/");
+}
 function goTo7DayForecast() {
   router.push("Next7Days");
 }
@@ -185,10 +183,11 @@ body {
 .location-heading {
   text-align: center;
   margin-bottom: 1.5rem;
+  cursor: pointer;
 }
 
 .city-heading {
-  font-size: 2rem;
+  font-size: 2.25rem;
   color: var(--wx-text-primary);
   margin: 0 0 0.25rem 0;
   font-weight: 600;
@@ -196,7 +195,7 @@ body {
 }
 
 .country-heading {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   color: var(--wx-text-secondary);
   margin: 0;
   display: flex;
@@ -213,7 +212,7 @@ body {
   filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
   transition: transform 0.3s ease;
 }
-.country-heading:hover .location-svg {
+.country-heading:hover .location-svg.city-heading {
   transform: scale(1.1);
 }
 
@@ -222,20 +221,6 @@ body {
   height: 250px;
   margin: 20px 0;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
-}
-
-.loading {
-  width: 80%;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  color: var(--wx-loading);
-  font-size: 1.5em;
-  font-weight: bold;
-  margin: auto;
-  z-index: 99;
 }
 
 .weather-info {
@@ -270,7 +255,7 @@ body {
 .weather-button-group {
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   min-width: 40px;
   max-width: 400px;
@@ -295,7 +280,8 @@ button {
   margin-bottom: 30px;
 }
 
-.weather-btn-7days {
+.weather-btn-7days,
+.btn-back-home-page {
   border: none;
   background-color: transparent;
   font-weight: bold;
@@ -353,7 +339,6 @@ button {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
-/* Mobile Responsive */
 @media (max-width: 768px) {
   .city-heading {
     font-size: 1.5rem;
@@ -376,11 +361,11 @@ button {
   }
 
   .summary {
-    font-size: 2em;
+    font-size: 1.5em;
   }
 
   .temperature {
-    font-size: 3em;
+    font-size: 2em;
   }
 
   .contain {
@@ -393,7 +378,11 @@ button {
   }
   .contain {
     width: 100px;
-    padding: 6px;
+    padding: 6 px;
+  }
+  .loading-svg {
+    width: 50px;
+    height: auto;
   }
 }
 
@@ -433,18 +422,37 @@ button {
   transform: translateY(-20px) scale(1.02);
 }
 
-.slide-fade-enter-active {
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+.loading-enter-active,
+.loading-appear-active {
+  transition: opacity 0.2s ease-in-out;
 }
-.slide-fade-leave-active {
-  transition: all 0.25s cubic-bezier(0.55, 0.085, 0.68, 0.53);
-}
-.slide-fade-enter-from {
+
+.loading-enter-from,
+.loading-appear-from,
+.loading-leave-to {
   opacity: 0;
-  transform: translate(-50%, -100%);
 }
-.slide-fade-leave-to {
-  opacity: 0;
-  transform: translate(-50%, -100%);
+
+.loading-enter-to,
+.loading-appear-to,
+.loading-leave-from {
+  opacity: 1;
+}
+.loading {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  color: var(--wx-loading);
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: auto;
+  z-index: 10000;
+}
+.loading-svg {
+  width: 55px;
+  height: auto;
 }
 </style>
