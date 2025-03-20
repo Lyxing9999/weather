@@ -16,8 +16,6 @@ npm install
 
 Run the app in development mode:
 
-### Compiles and hot-reloads for development
-
 ```
 npm run serve
 ```
