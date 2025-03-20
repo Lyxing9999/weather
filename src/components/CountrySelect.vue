@@ -282,7 +282,7 @@ function goBack() {
   background-color: var(--background-color);
   text-align: center;
   color: var(--text-color);
-  top: 10%;
+  top: 5%;
   padding: 1em;
   padding-block: 4em;
   font-family: "Arial", sans-serif;
