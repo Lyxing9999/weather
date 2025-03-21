@@ -3,7 +3,10 @@
   <Transition name="loading" appear>
     <div v-if="loading" class="loading">
       <div>Weather loading</div>
-      <img class="loading-svg" src="@/assets/Loading.svg" alt="" />
+      <img
+        class="loading-svg"
+        src="@/assets/Loading.svg"
+        alt="loading animation" />
     </div>
   </Transition>
 

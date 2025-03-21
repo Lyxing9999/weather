@@ -62,8 +62,4 @@ footer:hover {
     padding: 10px 15px;
   }
 }
-
-body {
-  padding-bottom: 40px;
-}
 </style>
