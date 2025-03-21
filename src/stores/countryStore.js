@@ -1,6 +1,6 @@
 import axios from "axios";
 import { defineStore } from "pinia";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 
 //Country Store
 export const useCountryWeatherStore = defineStore("weather", () => {
@@ -136,11 +136,6 @@ export const useCountryWeatherStore = defineStore("weather", () => {
       console.error(error);
     }
   }
-  // Lifecycle hook
-  onMounted(async () => {
-    await getCurrentLocation();
-    await getCountryByLatLon();
-  });
 
   const WeatherIcon = {
     1: "not-available.svg",
