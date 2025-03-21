@@ -1,6 +1,15 @@
 <template>
-  <footer class="copyright">
+  <footer class="copyright" aria-label="Footer with copyright information">
     <p>&copy; 2025 Kaing Bunly. All Rights Reserved.</p>
+    <p>
+      Weather icons by
+      <a
+        href="https://github.com/erikflowers/weather-icons"
+        target="_blank"
+        rel="noopener noreferrer">
+        Erik Flowers </a
+      >, used under SIL Open Font License.
+    </p>
   </footer>
 </template>
 
@@ -9,25 +18,52 @@
 <style scoped>
 footer {
   text-align: center;
-  padding: 5px 10px; /* Small padding */
-  background-color: #f0f4f8;
-  width: 100%; /* Full width */
+  padding: 8px 10px;
+  background: linear-gradient(90deg, #e0eafc, #cfdef3);
+  width: 100%;
   position: fixed;
   bottom: 0;
-  left: 0; /* Aligns it to the left edge */
+  left: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
-  font-size: 10px; /* Smaller font */
-  opacity: 0.75;
-  transition: opacity 0.3s ease;
+  font-size: 10px;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 10;
 }
 
 footer:hover {
   opacity: 1;
+  transform: translateY(-2px);
 }
 
 .copyright p {
   margin: 0;
-  color: #666;
+  color: #333;
+  line-height: 1.4;
+  letter-spacing: 0.5px;
+}
+
+.copyright a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.copyright a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+  footer {
+    font-size: 12px;
+    padding: 10px 15px;
+  }
+}
+
+body {
+  padding-bottom: 40px;
 }
 </style>

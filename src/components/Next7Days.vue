@@ -178,15 +178,14 @@ const goBack = () => {
 }
 
 .back-button {
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
 
 .back-button:hover {
   color: #fff;
-  background-color: var(--secondary-color);
+  background-color: var(--secondary-color-hover);
 }
 
-/* Weather forecast transitions - optimized for the 1000ms loading timeout */
 .weather-forecast-enter-active {
   transition: all 0.75s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity, transform;
@@ -197,13 +196,11 @@ const goBack = () => {
   will-change: opacity, transform;
 }
 
-/* Enter smoothly with slight rise */
 .weather-forecast-enter-from {
   opacity: 0;
   transform: translateY(15px) scale(0.98);
 }
 
-/* Leave smoothly with gentle upward motion */
 .weather-forecast-leave-to {
   opacity: 0;
   transform: translateY(-10px) scale(1.01);
