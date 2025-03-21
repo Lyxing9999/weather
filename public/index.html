@@ -1,25 +1,19 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' https://apis.example.com; style-src 'self' 'unsafe-inline';" />
+
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
-
-  <body role="document">
+  <body>
     <noscript>
       <strong>
-        We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
-        properly without JavaScript enabled. Please enable it to continue.
+        We're sorry but this page doesn't work properly without JavaScript
+        enabled. Please enable it to continue.
       </strong>
     </noscript>
-    <div id="app" role="main"></div>
-    <!-- built files will be auto injected -->
+    <div id="app"></div>
   </body>
 </html>

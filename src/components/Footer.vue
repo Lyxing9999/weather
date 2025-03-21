@@ -1,8 +1,7 @@
 <template>
   <footer class="copyright" aria-label="Footer with copyright information">
-    <p>&copy; 2025 Kaing Bunly. All Rights Reserved.</p>
     <p>
-      Weather SVG animations by
+      &copy; 2025 Kaing Bunly. All Rights Reserved. SVG by
       <a
         href="https://github.com/basmilius/weather-icons"
         target="_blank"
@@ -18,7 +17,7 @@
 <style scoped>
 footer {
   text-align: center;
-  padding: 8px 10px;
+  padding: 5px 8px;
   background: linear-gradient(90deg, #e0eafc, #cfdef3);
   width: 100%;
   position: fixed;
@@ -26,7 +25,7 @@ footer {
   left: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
-  font-size: 12px;
+  font-size: 14px; /* Smaller font size */
   opacity: 0.9;
   transition: all 0.3s ease;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
@@ -59,7 +58,6 @@ footer:hover {
 @media (min-width: 768px) {
   footer {
     font-size: 12px;
-    padding: 10px 15px;
   }
 }
 </style>
