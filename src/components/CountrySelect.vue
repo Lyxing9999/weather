@@ -280,12 +280,10 @@ function goBack() {
   color: var(--text-color);
   top: 5%;
   padding: 1em;
-  padding-block: 4em;
+  padding-block: 3em;
   font-family: "Arial", sans-serif;
   z-index: 10;
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.1),
-    0 4px 20px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 -6px 15px rgba(0, 0, 0, 0.2);
 }
 
 .from-slide-enter-active {
@@ -379,8 +377,8 @@ select {
 }
 
 select:focus {
-  border-color: var(--primary-color);
-  transform: scale(1.05);
+  border-color: var(--secondary-color);
+  transform: scale(1.02);
 }
 
 h1 {
@@ -455,8 +453,9 @@ select option:disabled {
 }
 
 select {
-  font-size: 14px;
-  width: 68%;
+  font-size: 1rem;
+  width: 70%;
+  margin-bottom: 10px;
 }
 
 select:disabled {
@@ -485,10 +484,10 @@ select option:disabled {
 
 .button-primary {
   background-color: var(--secondary-color);
+  position: relative;
   color: #ffffff;
   border: 2px solid var(--secondary-color);
-  font-size: 0.8rem;
-  position: relative;
+  font-size: 0.95rem;
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -550,6 +549,12 @@ select option:disabled {
 .button-normal:active {
   transform: scale(1);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+.button-reset {
+  width: 200px;
+}
+.buttons {
+  gap: 1px;
 }
 @media (max-width: 500px) {
   h1 {

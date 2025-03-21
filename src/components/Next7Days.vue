@@ -34,7 +34,7 @@ const weatherStore = useCountryWeatherStore();
 const loading = ref(true);
 setTimeout(() => {
   loading.value = false;
-}, 1000);
+}, 600);
 
 const weeklyData = computed(() => {
   if (
@@ -128,6 +128,7 @@ const goBack = () => {
   justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
+  margin-bottom: 2em;
 }
 
 .day-card {
@@ -173,13 +174,11 @@ const goBack = () => {
 .back-button-container {
   display: flex;
   justify-content: flex-start;
-  margin-top: 20px;
+  align-items: center;
 }
 
 .back-button {
-  padding: 10px;
-  background-color: transparent;
-  border-width: 1px;
+  margin-bottom: 30px;
 }
 
 .back-button:hover {
@@ -187,22 +186,27 @@ const goBack = () => {
   background-color: var(--secondary-color);
 }
 
-.weather-forecast-enter-active,
-.weather-forecast-leave-active {
-  transition:
-    opacity 1.5s ease-out,
-    transform 1.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+/* Weather forecast transitions - optimized for the 1000ms loading timeout */
+.weather-forecast-enter-active {
+  transition: all 0.75s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity, transform;
 }
 
-.weather-forecast-enter-from {
-  opacity: 0;
-  transform: translateY(20px) scale(0.97);
+.weather-forecast-leave-active {
+  transition: all 0.6s ease-out;
+  will-change: opacity, transform;
 }
 
+/* Enter smoothly with slight rise */
+.weather-forecast-enter-from {
+  opacity: 0;
+  transform: translateY(15px) scale(0.98);
+}
+
+/* Leave smoothly with gentle upward motion */
 .weather-forecast-leave-to {
   opacity: 0;
-  transform: translateY(-20px) scale(1.02);
+  transform: translateY(-10px) scale(1.01);
 }
 
 @media (max-width: 768px) {
@@ -220,10 +224,8 @@ const goBack = () => {
     font-size: 1.4em;
   }
   .back-button {
-    padding: 5px;
-  }
-  .back-button-container {
-    width: 100px;
+    font-size: 0.8rem;
+    width: 130px;
   }
 }
 </style>

@@ -128,7 +128,7 @@ const formattedDate = computed(() => {
       year: "numeric",
       month: "long",
       day: "numeric",
-      hour: "2-digit",
+      hour: "numeric",
       minute: "2-digit",
       hour12: true,
     };
@@ -261,6 +261,12 @@ function goTo7DayForecast() {
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+.weather-btn-7days {
+  width: 160px;
+}
+.btn-back-home-page {
+  width: 130px;
+}
 
 .weather-btn-7days:before,
 .btn-back-home-page:before {
@@ -270,6 +276,7 @@ function goTo7DayForecast() {
   left: -100%;
   width: 100%;
   height: 100%;
+
   background: rgba(255, 255, 255, 0.1);
   transition: all 0.4s ease;
 }
@@ -289,10 +296,6 @@ function goTo7DayForecast() {
 .btn-back-home-page:active {
   transform: translateY(-2px);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-}
-
-button {
-  width: 200px;
 }
 
 .container {
@@ -389,6 +392,14 @@ button {
   .temperature {
     font-size: 2em;
   }
+  .weather-btn-7days {
+    font-size: 0.8rem;
+    width: 150px;
+  }
+  .btn-back-home-page {
+    font-size: 0.8rem;
+    width: 120px;
+  }
 
   .contain {
     width: 120px;
@@ -408,39 +419,48 @@ button {
   }
 }
 
-.weather-page-enter-active,
+.weather-page-enter-active {
+  transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
 .weather-page-leave-active {
-  transition:
-    opacity 0.7s ease-in,
-    transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.3s ease-out;
   will-change: opacity, transform;
 }
 
 .weather-page-enter-from {
   opacity: 0;
-  transform: translateY(20px) scale(0.97);
+  transform: translateY(12px);
 }
 
 .weather-page-leave-to {
   opacity: 0;
-  transform: translateY(-20px) scale(1.02);
 }
 
-.loading-enter-active,
-.loading-appear-active {
-  transition: opacity 0.2s ease-in-out;
+.loading-enter-active {
+  transition: all 0.25s ease-out;
 }
 
-.loading-enter-from,
-.loading-appear-from,
-.loading-leave-to {
+.loading-leave-active {
+  transition: all 0.4s ease-in;
+  position: absolute;
+  width: 100%;
+}
+
+.loading-enter-from {
   opacity: 0;
 }
 
-.loading-enter-to,
-.loading-appear-to,
-.loading-leave-from {
-  opacity: 1;
+.loading-leave-to {
+  opacity: 0;
+  transform: scale(0.96);
+}
+
+/* Performance optimizations */
+.weather-page-view {
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .loading {
@@ -456,8 +476,11 @@ button {
   margin: auto;
   z-index: 10000;
 }
+
 .loading-svg {
   width: 55px;
   height: auto;
+  transform: translateZ(0);
+  background-color: transparent;
 }
 </style>

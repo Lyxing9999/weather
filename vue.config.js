@@ -7,7 +7,7 @@ module.exports = defineConfig({
   outputDir: "dist",
   configureWebpack: {
     optimization: {
-      minimize: true, // Ensures minification of code
+      minimize: true,
     },
   },
 });
