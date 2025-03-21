@@ -1,21 +1,13 @@
 <template>
   <footer class="copyright" aria-label="Footer with copyright information">
     <p>
-<<<<<<< HEAD
       &copy; 2025 Kaing Bunly. All Rights Reserved. SVG by
-=======
-      Weather SVG animations by
->>>>>>> 104597e9f983ef260bba7c7e3c880d0e1f80ba9d
       <a
         href="https://github.com/basmilius/weather-icons"
         target="_blank"
         rel="noopener noreferrer">
         Basmilius
       </a>
-<<<<<<< HEAD
-=======
-      , used with permission.
->>>>>>> 104597e9f983ef260bba7c7e3c880d0e1f80ba9d
     </p>
   </footer>
 </template>
