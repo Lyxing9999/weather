@@ -2,13 +2,13 @@
   <footer class="copyright" aria-label="Footer with copyright information">
     <p>&copy; 2025 Kaing Bunly. All Rights Reserved.</p>
     <p>
-      Weather icons by
+      Weather SVG animations by
       <a
-        href="https://github.com/erikflowers/weather-icons"
+        href="https://github.com/basmilius/weather-icons"
         target="_blank"
         rel="noopener noreferrer">
-        Erik Flowers </a
-      >, used under SIL Open Font License.
+        Basmilius
+      </a>
     </p>
   </footer>
 </template>
