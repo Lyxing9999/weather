@@ -26,7 +26,7 @@ footer {
   left: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
-  font-size: 10px;
+  font-size: 12px;
   opacity: 0.9;
   transition: all 0.3s ease;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
