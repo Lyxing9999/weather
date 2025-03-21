@@ -16,8 +16,6 @@ npm install
 
 Run the app in development mode:
 
-### Compiles and hot-reloads for development
-
 ```
 npm run serve
 ```
@@ -32,11 +30,10 @@ Build the app for production:
 npm run build
 ```
 
-### Lints and Fixes Files
+
 
 ### Lints and Fixes Files
 
-Lint and fix the files:
 
 ```
 npm run lint
