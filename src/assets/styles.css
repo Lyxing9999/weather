@@ -7,8 +7,8 @@
   --shadow: 0px 15px 25px rgba(0, 0, 0, 0.3);
   --blur-bg: rgba(255, 255, 255, 0.6);
   --background-color: #f0f8ff;
-
-  --wx-accent: #6c8ea4;
+  --border-color: #0047ab;
+  --wx-accent: var(--primary-gradient);
   --wx-text-secondary: #7f8c8d;
   --wx-text-muted: rgba(44, 62, 80, 0.9);
   --wx-loading: #6c8ea4;

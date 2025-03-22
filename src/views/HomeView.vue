@@ -201,7 +201,7 @@ setTimeout(() => {
 
 .option-button-toggle,
 .option-button-get-weather {
-  font-size: 1.2em;
+  font-size: 1.3em;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   overflow: hidden;

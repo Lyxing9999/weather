@@ -258,6 +258,7 @@ function goTo7DayForecast() {
 .weather-btn-7days,
 .btn-back-home-page {
   border: none;
+  font-weight: 600;
   background-color: transparent;
   font-weight: bold;
   position: relative;
@@ -460,7 +461,6 @@ function goTo7DayForecast() {
   transform: scale(0.96);
 }
 
-/* Performance optimizations */
 .weather-page-view {
   transform: translateZ(0);
   backface-visibility: hidden;

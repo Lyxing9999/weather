@@ -131,7 +131,7 @@ const goBack = () => {
   justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
-  margin-bottom: 2em;
+  margin-bottom: 3em;
 }
 
 .day-card {
@@ -182,11 +182,42 @@ const goBack = () => {
 
 .back-button {
   margin-bottom: 50px;
+  color: #fff;
+  font-weight: 600;
+  background-color: var(--secondary-color-hover);
+  border: 2px solid var(--secondary-color);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .back-button:hover {
+  color: var(--secondary-color-hover);
+  background-color: #fff;
+}
+
+.back-button:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.4s ease;
+}
+.back-button:hover {
   color: #fff;
   background-color: var(--secondary-color-hover);
+}
+
+.back-button:hover:before {
+  left: 100%;
+}
+
+.back-button:active {
+  transform: scale(1);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
 
 .weather-forecast-enter-active {
@@ -221,11 +252,14 @@ const goBack = () => {
     font-size: 1.2em;
   }
   .weekly-title {
-    font-size: 1.4em;
+    font-size: 1.7em;
   }
   .back-button {
-    font-size: 0.8rem;
-    width: 130px;
+    font-size: 0.75rem;
+    width: 118px;
+  }
+  .back-button {
+    margin-bottom: 35px;
   }
 }
 </style>

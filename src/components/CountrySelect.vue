@@ -67,23 +67,18 @@
           </button>
         </p>
       </Transition>
-      <Transition name="button-fade" appear>
-        <div class="button-container buttons">
-          <button
-            :class="{ 'button-primary': cities, 'button-normal': !cities }"
-            @click="getLocationData">
-            <span v-if="weatherStore.loading">Loading...</span>
-            <span v-else>{{ cities ? "Get Weather" : "Search Cities" }}</span>
-          </button>
-          <button
-            v-show="cities"
-            @click="resetAll"
-            class="button-reset buttons">
-            Reset
-          </button>
-          <button class="button-back" @click="goBack">Back</button>
-        </div>
-      </Transition>
+      <div class="button-container buttons">
+        <button
+          :class="{ 'button-primary': cities, 'button-normal': !cities }"
+          @click="getLocationData">
+          <span v-if="weatherStore.loading">Loading...</span>
+          <span v-else>{{ cities ? "Get Weather" : "Search Cities" }}</span>
+        </button>
+        <button v-show="cities" @click="resetAll" class="button-reset buttons">
+          Reset
+        </button>
+        <button class="button-back" @click="goBack">Back</button>
+      </div>
     </div>
   </Transition>
 </template>
@@ -157,7 +152,7 @@ onUnmounted(() => document.removeEventListener("click", handleClickOutside));
 const toggleDropdown = debounce(() => {
   dropdownVisible.value =
     !!selectedCountry.value && filteredCountries.value.length > 0;
-}, 100);
+}, 50);
 
 // Get weather location data
 async function getLocationData() {
@@ -267,25 +262,6 @@ function goBack() {
   opacity: 0;
   transform: scale(0.95);
 }
-
-.search-country {
-  width: 100vw;
-  max-width: 400px;
-  position: absolute;
-  height: auto;
-  border-radius: 15px;
-  box-shadow: var(--box-shadow);
-  background-color: var(--background-color);
-  text-align: center;
-  color: var(--text-color);
-  top: 5%;
-  padding: 1em;
-  padding-block: 3em;
-  font-family: "Arial", sans-serif;
-  z-index: 10;
-  box-shadow: 0 -6px 15px rgba(0, 0, 0, 0.2);
-}
-
 .from-slide-enter-active {
   transition: all 0.4s ease-out;
 }
@@ -301,6 +277,23 @@ function goBack() {
   opacity: 0;
   transform: translateY(-100%);
 }
+.search-country {
+  width: 100vw;
+  max-width: 400px;
+  position: absolute;
+  height: auto;
+  border-radius: 15px;
+  box-shadow: var(--box-shadow);
+  background-color: var(--background-color);
+  text-align: center;
+  color: var(--primary-gradient);
+  top: 5%;
+  padding: 1em;
+  padding-block: 3em;
+  font-family: "Arial", sans-serif;
+  z-index: 10;
+  box-shadow: 0 -6px 15px rgba(0, 0, 0, 0.2);
+}
 
 input {
   width: 80%;
@@ -309,19 +302,18 @@ input {
   border-radius: 25px;
   border: 2px solid #ddd;
   background-color: transparent;
-  color: var(--text-color);
-  box-shadow: var(--box-shadow);
-  transition: all 0.3s ease-in-out;
+  color: var(--primary-gradient);
+  transition: all 0.3s ease;
 }
 
 input:focus {
-  border-color: var(--primary-color);
+  border-color: #1b3b6f;
+  background-color: rgba(240, 248, 255, 0.1);
+  color: #333;
   transform: scale(1.02);
-  box-shadow:
-    0 0 0 3px rgba(var(--primary-rgb), 0.2),
-    0 4px 20px rgba(var(--primary-rgb), 0.1);
+  box-shadow: 0 0 8px rgba(27, 59, 111, 0.3);
+  outline: none;
 }
-
 .dropdown {
   position: absolute;
   right: 0;
@@ -345,9 +337,6 @@ input:focus {
   padding: 10px;
   cursor: pointer;
   border-radius: 8px;
-  transition:
-    background-color 0.3s ease,
-    transform 0.2s ease;
 }
 
 .dropdown-list li:hover {
@@ -360,7 +349,7 @@ label[for="selectedPlaceId"] {
   margin-top: 1rem;
   font-size: 1.6rem;
   font-weight: bold;
-  color: var(--primary-color);
+  color: var(--primary-gradient);
 }
 
 select {
@@ -373,21 +362,21 @@ select {
   background-color: #f9f9f9;
   color: var(--text-color);
   box-shadow: var(--box-shadow);
-  transition: all 0.3s ease-in-out;
+  outline: none;
+  transition: all 0.3s ease;
 }
 
 select:focus {
-  border-color: var(--secondary-color);
-  transform: scale(1.02);
+  border-color: var(--border-color);
 }
 
 h1 {
-  color: var(--primary-color);
+  color: var(--primary-gradient);
   font-size: 2rem;
 }
 
 h2 {
-  color: var(--primary-color);
+  color: var(--primary-gradient);
   font-size: 1.7rem;
 }
 
