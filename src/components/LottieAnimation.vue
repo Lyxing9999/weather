@@ -9,13 +9,15 @@ import animationData from "@/assets/Animation-BG.json";
 const animationContainer = ref("");
 let animationInstance = null;
 onMounted(() => {
-  animationInstance = lottie.loadAnimation({
-    container: animationContainer.value,
-    renderer: "svg",
-    loop: true,
-    autoplay: true,
-    animationData: animationData,
-  });
+  if (animationContainer.value) {
+    animationInstance = lottie.loadAnimation({
+      container: animationContainer.value,
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
+      animationData: animationData,
+    });
+  }
 });
 onBeforeUnmount(() => {
   if (animationInstance) {
@@ -28,5 +30,6 @@ onBeforeUnmount(() => {
 .lottie-animation {
   width: 100%;
   height: 100%;
+  position: relative;
 }
 </style>

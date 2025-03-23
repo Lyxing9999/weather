@@ -152,7 +152,7 @@ onUnmounted(() => document.removeEventListener("click", handleClickOutside));
 const toggleDropdown = debounce(() => {
   dropdownVisible.value =
     !!selectedCountry.value && filteredCountries.value.length > 0;
-}, 50);
+}, 100);
 
 // Get weather location data
 async function getLocationData() {
