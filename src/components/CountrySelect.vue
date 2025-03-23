@@ -245,7 +245,7 @@ function goBack() {
 <style scoped>
 .dropdown-fade-enter-active,
 .dropdown-fade-leave-active {
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 .dropdown-fade-enter-from,
 .dropdown-fade-leave-to {
@@ -560,10 +560,6 @@ select option:disabled {
     font-size: 14px;
   }
 
-  .dropdown {
-    left: 50%;
-    transform: translateX(-10%);
-  }
   .button-container {
     margin-top: 1.2rem;
   }

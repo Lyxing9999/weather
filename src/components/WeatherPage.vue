@@ -443,11 +443,11 @@ function goTo7DayForecast() {
 }
 
 .loading-enter-active {
-  transition: all 0.25s ease-out;
+  transition: all 0.3s ease-out;
 }
 
 .loading-leave-active {
-  transition: all 0.4s ease-in;
+  transition: all 0.1s ease-in;
   position: absolute;
   width: 100%;
 }
