@@ -23,7 +23,6 @@ export const useCountryWeatherStore = defineStore("weather", () => {
     "https://www.meteosource.com/api/v1/free/nearest_place";
 
   async function getWeatherData() {
-    console.log("API Key:", API_KEY);
     if (loading.value) return;
     weatherData.value = null;
     isWeatherApiSuccessful.value = false;
