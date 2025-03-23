@@ -95,6 +95,26 @@ const goBack = () => {
 </script>
 
 <style>
+.weather-forecast-enter-active {
+  transition: all 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.weather-forecast-leave-active {
+  transition: all 0.6s ease-out;
+  will-change: opacity, transform;
+}
+
+.weather-forecast-enter-from {
+  opacity: 0;
+  transform: translateY(15px) scale(0.98);
+}
+
+.weather-forecast-leave-to {
+  opacity: 0;
+  transform: translateY(-10px) scale(1.01);
+}
+
 .weekly-forecast-view {
   width: 100%;
   max-width: 1000px;
@@ -218,26 +238,6 @@ const goBack = () => {
 .back-button:active {
   transform: scale(1);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-}
-
-.weather-forecast-enter-active {
-  transition: all 0.75s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: opacity, transform;
-}
-
-.weather-forecast-leave-active {
-  transition: all 0.6s ease-out;
-  will-change: opacity, transform;
-}
-
-.weather-forecast-enter-from {
-  opacity: 0;
-  transform: translateY(15px) scale(0.98);
-}
-
-.weather-forecast-leave-to {
-  opacity: 0;
-  transform: translateY(-10px) scale(1.01);
 }
 
 @media (max-width: 768px) {

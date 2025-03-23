@@ -559,7 +559,6 @@ select option:disabled {
     width: 80%;
     font-size: 14px;
   }
-
   .button-container {
     margin-top: 1.2rem;
   }

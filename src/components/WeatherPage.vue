@@ -155,6 +155,69 @@ function goTo7DayForecast() {
 }
 </script>
 <style>
+.weather-page-enter-active {
+  transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.weather-page-leave-active {
+  transition: all 0.3s ease-out;
+  will-change: opacity, transform;
+}
+
+.weather-page-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.weather-page-leave-to {
+  opacity: 0;
+}
+
+.loading-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.loading-leave-active {
+  transition: all 0.1s ease-in;
+  position: absolute;
+  width: 100%;
+}
+
+.loading-enter-from {
+  opacity: 0;
+}
+
+.loading-leave-to {
+  opacity: 0;
+  transform: scale(0.96);
+}
+
+.weather-page-view {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.loading {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  color: var(--wx-loading);
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: auto;
+  z-index: 10000;
+}
+
+.loading-svg {
+  width: 55px;
+  height: auto;
+  transform: translateZ(0);
+  background-color: transparent;
+}
 .weather-page-view {
   width: 100%;
   max-width: 1200px;
@@ -421,69 +484,5 @@ function goTo7DayForecast() {
     width: 50px;
     height: auto;
   }
-}
-
-.weather-page-enter-active {
-  transition: all 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: opacity, transform;
-}
-
-.weather-page-leave-active {
-  transition: all 0.3s ease-out;
-  will-change: opacity, transform;
-}
-
-.weather-page-enter-from {
-  opacity: 0;
-  transform: translateY(12px);
-}
-
-.weather-page-leave-to {
-  opacity: 0;
-}
-
-.loading-enter-active {
-  transition: all 0.3s ease-out;
-}
-
-.loading-leave-active {
-  transition: all 0.1s ease-in;
-  position: absolute;
-  width: 100%;
-}
-
-.loading-enter-from {
-  opacity: 0;
-}
-
-.loading-leave-to {
-  opacity: 0;
-  transform: scale(0.96);
-}
-
-.weather-page-view {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
-.loading {
-  width: 80%;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  color: var(--wx-loading);
-  font-size: 1.5em;
-  font-weight: bold;
-  margin: auto;
-  z-index: 10000;
-}
-
-.loading-svg {
-  width: 55px;
-  height: auto;
-  transform: translateZ(0);
-  background-color: transparent;
 }
 </style>
