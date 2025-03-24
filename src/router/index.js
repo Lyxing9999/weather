@@ -1,34 +1,34 @@
-import { createWebHistory, createRouter } from "vue-router";
-
 const routes = [
   {
     path: "/",
     name: "Home",
-    component: () => import("@/views/HomeView.vue"),
+    component: () =>
+      import(/* webpackChunkName: "home" */ "@/views/HomeView.vue"),
   },
   {
     path: "/country-select",
     name: "CountrySelect",
-    component: () => import("@/components/CountrySelect.vue"),
+    component: () =>
+      import(
+        /* webpackChunkName: "country-select" */ "@/components/CountrySelect.vue"
+      ),
   },
-
   {
     path: "/weather",
     name: "WeatherPage",
-    component: () => import("@/components/WeatherPage.vue"),
+    component: () =>
+      import(
+        /* webpackChunkName: "weather-page" */ "@/components/WeatherPage.vue"
+      ),
   },
   {
     path: "/next7Days",
     name: "Next7Days",
-    component: () => import("@/components/Next7Days.vue"),
+    component: () =>
+      import(/* webpackChunkName: "next7days" */ "@/components/Next7Days.vue"),
   },
   {
     path: "/:pathMatch(.*)*",
     redirect: "/",
   },
 ];
-const router = createRouter({
-  history: createWebHistory(),
-  routes,
-});
-export default router;

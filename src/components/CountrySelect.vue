@@ -50,7 +50,7 @@
       <!-- Error message if weather data for the selected country is not available -->
       <Transition name="error-fade">
         <p
-          v-if="weatherError && !dropdownVisible"
+          v-show="weatherError && !dropdownVisible"
           class="error-message"
           aria-live="assertive"
           role="alert">
@@ -342,6 +342,7 @@ input:focus {
 .dropdown-list li:hover {
   background-color: var(--secondary-color);
   color: white;
+  transition: all 0.2s ease;
 }
 
 label[for="selectedPlaceId"] {

@@ -1,7 +1,7 @@
 <template>
   <!-- laoding -->
   <Transition name="loading" appear>
-    <div v-if="loading" class="loading">
+    <div v-show="loading" class="loading">
       <div>Weather loading</div>
       <img
         class="loading-svg"
@@ -12,13 +12,13 @@
 
   <!-- weather page show -->
   <Transition name="weather-page">
-    <div v-if="!loading" class="weather-page-view">
+    <div v-show="!loading" class="weather-page-view">
       <div class="weather-info">
         <div class="location-heading" @click="locationHeadingClickHandler">
-          <h2 v-if="weatherStore.weatherCity" class="city-heading">
+          <h2 v-show="weatherStore.weatherCity" class="city-heading">
             {{ weatherStore.weatherCity }}
           </h2>
-          <h3 v-if="weatherStore.weatherCountry" class="country-heading">
+          <h3 v-show="weatherStore.weatherCountry" class="country-heading">
             {{ weatherStore.weatherCountry }}
             <img
               class="location-svg"
@@ -28,11 +28,7 @@
         </div>
         <!-- weather info -->
         <h1 class="summary">{{ summary || "No summary available" }}</h1>
-        <img
-          v-lazy="iconSrc"
-          alt="Weather icon"
-          class="weather-icon"
-          loading="lazy" />
+        <img :src="iconSrc" alt="Weather icon" class="weather-icon" />
         <p class="formatted-date">{{ formattedDate }}</p>
         <h1 class="temperature">
           {{ temperature || "No temperature available" }}

@@ -1,12 +1,12 @@
 <template>
   <!-- animation background -->
-  <div ref="animationContainer" class="animation-bg">
+  <div ref="animationContainer" class="animation-bg" loading="lazy">
     <LottieAnimation loading="lazy" />
   </div>
   <Transition name="home-view" appear>
-    <div v-if="!loading" class="full-screen">
+    <div v-show="!loading" class="full-screen">
       <!-- Buttons only render when isCountrySelectVisible is false -->
-      <div v-if="!isCountrySelectVisible" class="buttons">
+      <div class="buttons">
         <button class="option-button-toggle" @click="toggleCountrySelect">
           Select Country
         </button>
@@ -90,7 +90,6 @@ setTimeout(() => {
   overflow: hidden;
   z-index: 0;
 }
-
 .animation-bg {
   position: absolute;
   top: -10%;

@@ -29,5 +29,10 @@ module.exports = {
         minRatio: 0.8,
       }),
     ],
+    performance: {
+      hints: "warning",
+      maxEntrypointSize: 1024 * 1024,
+      maxAssetSize: 1024 * 1024,
+    },
   },
 };
