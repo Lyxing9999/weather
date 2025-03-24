@@ -1,5 +1,5 @@
 <template>
-  <div ref="animationContainer" class="lottie-animation"></div>
+  <div ref="animationContainer" class="lottie-animation" loading="lazy"></div>
 </template>
 
 <script setup>

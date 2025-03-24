@@ -14,7 +14,6 @@ export const useCountryWeatherStore = defineStore("weather", () => {
   const isLocationAccessRequested = ref(false);
   const weatherCountry = ref(null);
   const weatherCity = ref(null);
-  const errorMessage = ref("");
 
   //URL
   const API_KEY = process.env.VUE_APP_API_KEY;
@@ -49,8 +48,6 @@ export const useCountryWeatherStore = defineStore("weather", () => {
       loading.value = false;
     } catch (error) {
       console.error("API Error:", error);
-      errorMessage.value =
-        "Failed to fetch weather data. Please try again later.";
       alert("Failed to fetch weather data. Please try again later.");
     } finally {
       loading.value = false;
@@ -103,9 +100,6 @@ export const useCountryWeatherStore = defineStore("weather", () => {
             default:
               alert("An unknown error occurred while getting your location.");
           }
-
-          errorMessage.value =
-            "Failed to get your location. Try manually entering your city.";
           locationDenied.value = true;
         },
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
@@ -131,51 +125,8 @@ export const useCountryWeatherStore = defineStore("weather", () => {
       weatherCity.value = data.name || data.amd_area1 || "Unknown City";
       weatherCountry.value = data.country || "Unknown Country";
     } catch (error) {
-      errorMessage.value = "Failed to fetch location data.";
       console.error(error);
     }
-  }
-
-  const WeatherIcon = {
-    1: "not-available.svg",
-    2: "clear-day.svg",
-    3: "partly-cloudy-day.svg",
-    4: "partly-cloudy-day.svg",
-    5: "partly-cloudy-day.svg",
-    6: "cloudy.svg",
-    7: "overcast.svg",
-    8: "overcast.svg",
-    9: "fog.svg",
-    10: "drizzle.svg",
-    11: "rain.svg",
-    12: "partly-cloudy-day-rain.svg",
-    13: "overcast-rain.svg",
-    14: "thunderstorms.svg",
-    15: "thunderstorms-day.svg",
-    16: "snow.svg",
-    17: "snow.svg",
-    18: "partly-cloudy-day-snow.svg",
-    19: "overcast-snow.svg",
-    20: "sleet.svg",
-    21: "partly-cloudy-day-sleet.svg",
-    22: "sleet.svg",
-    23: "sleet.svg",
-    24: "partly-cloudy-day-sleet.svg",
-    25: "hail.svg",
-    26: "clear-night.svg",
-    27: "partly-cloudy-night.svg",
-    28: "partly-cloudy-night.svg",
-    29: "partly-cloudy-night.svg",
-    30: "cloudy.svg",
-    31: "overcast-night.svg",
-    32: "overcast-night-rain.svg",
-    33: "thunderstorms-night.svg",
-    34: "overcast-night-snow.svg",
-    35: "overcast-night-sleet.svg",
-    36: "partly-cloudy-night-sleet.svg",
-  };
-  function getWeatherIconById(iconId) {
-    return WeatherIcon[iconId] || "not-available.svg";
   }
 
   return {
@@ -189,9 +140,7 @@ export const useCountryWeatherStore = defineStore("weather", () => {
     lon,
     loading,
     isLocationAccessRequested,
-    getWeatherIconById,
     weatherCountry,
     weatherCity,
-    errorMessage,
   };
 });

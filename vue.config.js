@@ -1,44 +1,33 @@
-const { defineConfig } = require("@vue/cli-service");
+module.exports = {
+  chainWebpack: (config) => {
+    config.performance.maxEntrypointSize(250000).maxAssetSize(250000);
+    config.optimization.splitChunks({
+      minSize: 10000,
+      maxSize: 250000,
+    });
+  },
+  configureWebpack: {
+    externals:
+      process.env.NODE_ENV === "production"
+        ? {
+            "lottie-web": "lottie",
+          }
+        : {},
+  },
+};
+
 const CompressionPlugin = require("compression-webpack-plugin");
 
-module.exports = defineConfig({
-  transpileDependencies: true, // Ensures necessary dependencies are transpiled
-
-  // Defines base public path depending on the environment
-  publicPath: process.env.NODE_ENV === "production" ? "/" : "/",
-
-  // Output directory for production build
-  outputDir: "dist",
-
+module.exports = {
+  // ... previous config
   configureWebpack: {
-    optimization: {
-      minimize: true, // Minifies JavaScript files for production
-      splitChunks: {
-        chunks: "all", // Split chunks for better caching
-        maxSize: 200000, // Limit chunk size to 200KB
-      },
-    },
     plugins: [
-      // Optionally, add webpack-bundle-analyzer plugin to analyze bundle size
-      // new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)()
+      new CompressionPlugin({
+        algorithm: "gzip",
+        test: /\.(js|css|json|html|ico|svg)(\?.*)?$/i,
+        threshold: 10240,
+        minRatio: 0.8,
+      }),
     ],
   },
-
-  chainWebpack: (config) => {
-    if (process.env.NODE_ENV === "production") {
-      // Add gzip compression for production build to reduce bundle size
-      config.plugin("compression").use(CompressionPlugin, [
-        {
-          algorithm: "gzip", // Gzip compression
-          test: /\.(js|css|html|svg)$/, // Files to compress
-          threshold: 8192, // Compress files > 8KB
-          minRatio: 0.8, // Compress files if they can be reduced by 20%
-        },
-      ]);
-    }
-
-    // Remove unnecessary preload and prefetch plugins for improved performance
-    config.plugins.delete("preload");
-    config.plugins.delete("prefetch");
-  },
-});
+};

@@ -1,6 +1,8 @@
 <template>
   <!-- animation background -->
-  <div ref="animationContainer" class="animation-bg"><LottieAnimation /></div>
+  <div ref="animationContainer" class="animation-bg">
+    <LottieAnimation loading="lazy" />
+  </div>
   <Transition name="home-view" appear>
     <div v-if="!loading" class="full-screen">
       <!-- Buttons only render when isCountrySelectVisible is false -->

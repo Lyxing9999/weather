@@ -79,9 +79,7 @@ const weeklyData = computed(() => {
         dayName: date.toLocaleDateString(undefined, options),
         temp: Math.round(tempValue),
         summary: summary,
-        iconSrc: require(
-          `@/assets/weather-svg/${weatherStore.getWeatherIconById(icon)}`
-        ),
+        iconSrc: require(`@/assets/weather-svg/${getWeatherIconById(icon)}`),
       };
     });
   } else {
@@ -96,6 +94,47 @@ const weeklyData = computed(() => {
 const goBack = () => {
   window.history.back();
 };
+const WeatherIcon = {
+  1: "not-available.svg",
+  2: "clear-day.svg",
+  3: "partly-cloudy-day.svg",
+  4: "partly-cloudy-day.svg",
+  5: "partly-cloudy-day.svg",
+  6: "cloudy.svg",
+  7: "overcast.svg",
+  8: "overcast.svg",
+  9: "fog.svg",
+  10: "drizzle.svg",
+  11: "rain.svg",
+  12: "partly-cloudy-day-rain.svg",
+  13: "overcast-rain.svg",
+  14: "thunderstorms.svg",
+  15: "thunderstorms-day.svg",
+  16: "snow.svg",
+  17: "snow.svg",
+  18: "partly-cloudy-day-snow.svg",
+  19: "overcast-snow.svg",
+  20: "sleet.svg",
+  21: "partly-cloudy-day-sleet.svg",
+  22: "sleet.svg",
+  23: "sleet.svg",
+  24: "partly-cloudy-day-sleet.svg",
+  25: "hail.svg",
+  26: "clear-night.svg",
+  27: "partly-cloudy-night.svg",
+  28: "partly-cloudy-night.svg",
+  29: "partly-cloudy-night.svg",
+  30: "cloudy.svg",
+  31: "overcast-night.svg",
+  32: "overcast-night-rain.svg",
+  33: "thunderstorms-night.svg",
+  34: "overcast-night-snow.svg",
+  35: "overcast-night-sleet.svg",
+  36: "partly-cloudy-night-sleet.svg",
+};
+function getWeatherIconById(iconId) {
+  return WeatherIcon[iconId] || "not-available.svg";
+}
 </script>
 
 <style scoped>
