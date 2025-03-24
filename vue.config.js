@@ -1,41 +1,44 @@
 const { defineConfig } = require("@vue/cli-service");
+const CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = defineConfig({
-  transpileDependencies: true,
+  transpileDependencies: true, // Ensures necessary dependencies are transpiled
 
+  // Defines base public path depending on the environment
   publicPath: process.env.NODE_ENV === "production" ? "/" : "/",
+
+  // Output directory for production build
   outputDir: "dist",
 
   configureWebpack: {
     optimization: {
-      minimize: true, // Minifies the output JavaScript files
+      minimize: true, // Minifies JavaScript files for production
       splitChunks: {
-        chunks: "all", // Automatically splits larger chunks into smaller ones
-        maxSize: 200000, // Limits the maximum size of a chunk to 200KB
+        chunks: "all", // Split chunks for better caching
+        maxSize: 200000, // Limit chunk size to 200KB
       },
     },
-    // This plugin helps to analyze your bundle size after the build process
     plugins: [
-      // Uncomment the next two lines if you want to use webpack-bundle-analyzer
+      // Optionally, add webpack-bundle-analyzer plugin to analyze bundle size
       // new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)()
     ],
   },
 
   chainWebpack: (config) => {
-    // Enable gzip compression for production builds
     if (process.env.NODE_ENV === "production") {
-      config.plugin("compression").use(require("compression-webpack-plugin"), [
+      // Add gzip compression for production build to reduce bundle size
+      config.plugin("compression").use(CompressionPlugin, [
         {
-          algorithm: "gzip", // Or 'brotli' for better compression
-          test: /\.(js|css|html|svg)$/,
-          threshold: 8192, // Only compress assets bigger than 8KB
-          minRatio: 0.8, // Compress if the file can be reduced by 20%
+          algorithm: "gzip", // Gzip compression
+          test: /\.(js|css|html|svg)$/, // Files to compress
+          threshold: 8192, // Compress files > 8KB
+          minRatio: 0.8, // Compress files if they can be reduced by 20%
         },
       ]);
     }
 
-    // Preload large assets to improve loading performance
-    config.plugins.delete("preload"); // Removes default preload, if unnecessary
-    config.plugins.delete("prefetch"); // Removes prefetching of assets not in use
+    // Remove unnecessary preload and prefetch plugins for improved performance
+    config.plugins.delete("preload");
+    config.plugins.delete("prefetch");
   },
 });

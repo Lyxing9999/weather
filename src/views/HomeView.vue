@@ -72,7 +72,7 @@ onMounted(async () => {
 
 setTimeout(() => {
   loading.value = false;
-}, 100);
+}, 50);
 </script>
 <style>
 .full-screen {

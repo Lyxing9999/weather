@@ -39,8 +39,28 @@
           <span class="degree-symbol">&#176;</span>
         </h1>
         <!-- weather info card component -->
-        <div class="weather-info-card">
-          <WeatherInfoCard :angle="angle" :speed="speed" :dir="dir" />
+        <div class="card" loading="lazy">
+          <div class="wind-info">
+            <img
+              class="icon"
+              src="@/assets/weather-svg/barometer.svg"
+              alt="Wind angle" />
+            <span>{{ angle || "N/A" }}&deg;</span>
+          </div>
+          <div class="wind-info">
+            <img
+              class="icon"
+              src="@/assets/weather-svg/wind.svg"
+              alt="Wind speed" />
+            <span>{{ speed || "N/A" }} m/s</span>
+          </div>
+          <div class="wind-info">
+            <img
+              class="icon"
+              src="@/assets/weather-svg/compass.svg"
+              alt="Wind direction" />
+            <span>{{ dir || "N/A" }}</span>
+          </div>
         </div>
         <!-- Button Navigation -->
         <div class="weather-button-group">
@@ -74,7 +94,6 @@
 import { useCountryWeatherStore } from "@/stores/countryStore";
 import { computed, ref, onMounted } from "vue";
 import router from "@/router";
-import WeatherInfoCard from "@/components/WeatherInfoCard.vue";
 
 const weatherStore = useCountryWeatherStore();
 const loading = ref(true);
@@ -150,9 +169,9 @@ const formattedDate = computed(() => {
 
 // Wind data
 const wind = computed(() => weatherStore.weatherData?.current?.wind || {});
-const angle = computed(() => wind.value?.angle);
-const dir = computed(() => wind.value?.dir);
-const speed = computed(() => wind.value?.speed);
+const angle = computed(() => wind.value?.angle || "N/A");
+const dir = computed(() => wind.value?.dir || "N/A");
+const speed = computed(() => wind.value?.speed || "N/A");
 
 function goBackHomePage() {
   router.push("/");
@@ -402,6 +421,56 @@ function goTo7DayForecast() {
   margin-bottom: 0.5em;
 }
 
+.card {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 15px;
+  margin-bottom: 40px;
+  padding: 15px;
+  background-color: var(--background-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.wind-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+}
+
+.wind-info .icon {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 10px;
+  transition: transform 0.3s ease;
+}
+
+.wind-info .icon:hover {
+  transform: scale(1.1);
+}
+
+.wind-info span {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: var(--wx-text-muted);
+}
+
+.wind-info:nth-child(1) span {
+  color: var(--accent-color);
+}
+
+.wind-info:nth-child(2) span {
+  color: var(--wx-accent);
+}
+
+.wind-info:nth-child(3) span {
+  color: var(--wx-text-primary);
+}
+
 .container::-webkit-scrollbar {
   height: 6px;
   margin-top: 1em;
@@ -490,6 +559,14 @@ function goTo7DayForecast() {
   .loading-svg {
     width: 50px;
     height: auto;
+  }
+}
+
+@media (max-width: 300px) {
+  .card {
+    grid-template-columns: 1fr;
+    background-color: transparent;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   }
 }
 </style>
