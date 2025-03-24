@@ -28,11 +28,7 @@
         </div>
         <!-- weather info -->
         <h1 class="summary">{{ summary || "No summary available" }}</h1>
-        <img
-          v-lazy="iconSrc"
-          alt="Weather icon"
-          class="weather-icon"
-          loading="lazy" />
+        <img :src="iconSrc" alt="Weather icon" class="weather-icon" />
         <p class="formatted-date">{{ formattedDate }}</p>
         <h1 class="temperature">
           {{ temperature || "No temperature available" }}
