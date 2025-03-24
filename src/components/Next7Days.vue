@@ -15,7 +15,11 @@
       <div class="weekly-container">
         <div v-for="(day, index) in weeklyData" :key="index" class="day-card">
           <h2 class="day-name">{{ day.dayName }}</h2>
-          <img v-lazy="day.iconSrc" alt="Weather icon" class="day-icon" />
+          <img
+            v-lazy="day.iconSrc"
+            alt="Weather icon"
+            class="day-icon"
+            loading="lazy" />
           <h3 class="day-temp">
             {{ day.temp }} <span class="degree-symbol-hourly">&#176;</span>
           </h3>

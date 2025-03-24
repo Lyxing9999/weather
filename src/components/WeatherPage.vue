@@ -28,7 +28,11 @@
         </div>
         <!-- weather info -->
         <h1 class="summary">{{ summary || "No summary available" }}</h1>
-        <img v-lazy="iconSrc" alt="Weather icon" class="weather-icon" />
+        <img
+          v-lazy="iconSrc"
+          alt="Weather icon"
+          class="weather-icon"
+          loading="lazy" />
         <p class="formatted-date">{{ formattedDate }}</p>
         <h1 class="temperature">
           {{ temperature || "No temperature available" }}
@@ -51,7 +55,10 @@
         <div class="container">
           <div v-for="daily in hourly" :key="daily.id" class="contain">
             <h2>{{ daily.formattedTime || "N/A" }}</h2>
-            <img v-lazy="daily.iconSrcHourly" alt="Hourly Weather Icon" />
+            <img
+              v-lazy="daily.iconSrcHourly"
+              alt="Hourly Weather Icon"
+              loading="lazy" />
             <h2>
               {{ daily.temperature || "N/A" }}
               <span class="degree-symbol-hourly">&#176;</span>
