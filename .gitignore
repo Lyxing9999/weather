@@ -1,9 +1,12 @@
+# Build and dependency directories
+node_modules/
+dist/
+
+# OS-specific junk files
 .DS_Store
-node_modules
-/dist
 
-
-# local env files
+# Local environment files
+.env
 .env.local
 .env.*.local
 
@@ -13,7 +16,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Editor directories and files
+# IDE/Editor-specific files
 .idea
 .vscode
 *.suo
