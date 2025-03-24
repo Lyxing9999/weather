@@ -320,6 +320,7 @@ input:focus {
   width: 100%;
   max-width: 200px;
   z-index: 5;
+  transition: all 0.3s ease;
 }
 
 .dropdown-list {
@@ -342,6 +343,7 @@ input:focus {
 .dropdown-list li:hover {
   background-color: var(--secondary-color);
   color: white;
+  transition: all 0.2s ease;
 }
 
 label[for="selectedPlaceId"] {
@@ -363,7 +365,6 @@ select {
   color: var(--text-color);
   box-shadow: var(--box-shadow);
   outline: none;
-  transition: all 0.3s ease;
 }
 
 select:focus {
@@ -567,6 +568,9 @@ select option:disabled {
   }
   button {
     margin: 6px;
+  }
+  .dropdown-fade-leave-active {
+    transition: all 0.1s ease;
   }
 }
 </style>
