@@ -569,8 +569,16 @@ select option:disabled {
   button {
     margin: 6px;
   }
+  .dropdown-fade-enter-from,
+  .dropdown-fade-leave-to {
+    opacity: 0;
+    transform: translate(5px);
+  }
   .dropdown-fade-leave-active {
     transition: all 0.1s ease;
+  }
+  .dropdown-list li {
+    transition: none;
   }
 }
 </style>
