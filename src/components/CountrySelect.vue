@@ -320,7 +320,6 @@ input:focus {
   width: 100%;
   max-width: 200px;
   z-index: 5;
-  transition: all 0.3s ease;
 }
 
 .dropdown-list {
@@ -338,12 +337,12 @@ input:focus {
   padding: 10px;
   cursor: pointer;
   border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 .dropdown-list li:hover {
   background-color: var(--secondary-color);
   color: white;
-  transition: all 0.2s ease;
 }
 
 label[for="selectedPlaceId"] {
@@ -568,17 +567,6 @@ select option:disabled {
   }
   button {
     margin: 6px;
-  }
-  .dropdown-fade-enter-from,
-  .dropdown-fade-leave-to {
-    opacity: 0;
-    transform: translate(5px);
-  }
-  .dropdown-fade-leave-active {
-    transition: all 0.1s ease;
-  }
-  .dropdown-list li {
-    transition: none;
   }
 }
 </style>
