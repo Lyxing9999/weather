@@ -49,7 +49,7 @@ For more details, see the [Vue CLI Configuration Reference](https://cli.vuejs.or
 
 - 🌍 Search for weather by city name
 - ☁️ Display current weather details
-- 🔥 7-day weather forecast (planned feature)
+- 🔥 7-day weather forecast
 - 🎯 Clean and modern UI built with Vue 3 and Composition API
 
 ---
